@@ -3,7 +3,7 @@
 		<q-header elevated>
 			<q-toolbar>
 				<q-toolbar-title>
-					<q-icon name="local_movies"/> Movie App
+					<q-icon name="local_movies"/> MovieApp
 				</q-toolbar-title>
 				<q-btn
 					flat
