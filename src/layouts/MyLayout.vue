@@ -22,8 +22,8 @@
 			side="right"
 			v-model="drawerRight"
 			bordered
-			:width="300"
-			:breakpoint="500"
+			:width="290"
+			:breakpoint="1024"
 			content-class="bg-grey-3"
 			 show-if-above
 		>
