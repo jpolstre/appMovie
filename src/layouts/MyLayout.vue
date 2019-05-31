@@ -28,7 +28,7 @@
 			content-class="bg-grey-3 overflow-hidden"
 			
 		>
-		<q-scroll-area class="fit" style="height:calc(100% - 110px);margin-top:110px;">
+		<q-scroll-area  style="height:calc(100% - 110px);margin-top:110px;">
 			<q-separator/>
 			<q-list dense>
 					
@@ -56,7 +56,7 @@
 													 </q-item-section>
 													 <q-item-section side >
 														 <!-- <q-toggle color="blue" v-model="estados" :val="genero.id" @input="changeToggle"/> -->
-														 <q-radio v-model="radioGenero" :val="genero.id" color="teal" @input="filterGenero"/>
+														 <q-radio v-model="$store.state.movie.filtro.idGenero" :val="genero.id" color="teal" @input="filterGenero"/>
 													 </q-item-section>
 												 </q-item>
 
@@ -100,7 +100,7 @@
 								<q-card-section>
 									<div class="col full-height row items-center">
 										<div class="q-date__years-item flex flex-center q-mt-xs" v-for="index in 20" :key="index">
-											<q-btn :color="indexElegido==index?'primary':'white'" size="sm" :text-color="indexElegido==index?'white':'black'" :label="1999+index" @click.native="filterYear(index)"/>
+											<q-btn :color="$store.state.movie.filtro.year==1999+index?'primary':'white'" size="sm" :text-color="$store.state.movie.filtro.year==1999+index?'white':'black'" :label="1999+index" @click.native="filterYear(index)"/>
 										</div>
 									</div>
 								</q-card-section>
@@ -140,7 +140,7 @@
 					</q-scroll-area>
 					<div class="absolute-top bg-white layout-drawer-toolbar"><form autocorrect="off" autocapitalize="off" autocomplete="off" spellcheck="false">
 
-						<q-input standout="bg-primary text-white" square  class="q-py-none q-my-none" v-model="search" placeholder="Buscar x titulo..." style="height: 50px;">	
+						<q-input standout="bg-primary text-white" square  class="q-py-none q-my-none" v-model="search" placeholder="Buscar titulo..." style="height: 50px;">	
 							<template v-slot:append>
 								<q-icon name="search" />
 							</template>
@@ -176,35 +176,60 @@ export default {
 			// estados:[],
 			year:2019,
 			search:'',
-			radioGenero:false,
-			indexElegido:null,
-			txtChip:null,
+			// radioValue:this.$store.state.movie.filtro.idGenero,
+			// indexElegido:null,
+			// txtChip:null,
 		}
 	},
 	created(){
 		// let keys = Object.keys(this.$store.state.movie.filtro)
-		// 	keys.forEach(key=>{
-		// 		if(opt[key]){
-		// 			switch(key){
-		// 				case 'idGenero':
-							
-		// 				break;
-		// 				case 'year':
-							
-		// 				break;
-		// 			}
+		// keys.forEach(key=>{
+		// 	let value =  this.$store.state.movie.filtro[key]
+		// 	if(value){//la primre valor q no es null
+		// 		switch(key){
+		// 			case 'idGenero':
+		// 				// this.radioValue = value
+		// 				this.txtChip = this.$store.state.movie.generos[value].nombre_es
+		// 			break;
+		// 			case 'year':
+		// 				// this.indexElegido = value-1999
+		// 				this.txtChip = value
+		// 			break;
 		// 		}
+		// 	 // break
+		// 	}
 		// })
 		
 	},
+	  computed:{
+		txtChip(){
+			let valReturn =  null
+			let keys = Object.keys(this.$store.state.movie.filtro)
+			keys.forEach(key=>{
+				let value = this.$store.state.movie.filtro[key]
+				if(value){//la primre valor q no es null
+					switch(key){
+						case 'idGenero':
+							valReturn =  this.$store.state.movie.generos[value].nombre_es
+						break;
+						case 'year':
+							valReturn = value
+						break;
+					}
+				}
+			})
+			return valReturn	
+			
+		}
+	  },
 	
 	methods: {
 		openURL,
 		resetFilter(){
 			this.$store.commit('movie/actualizarFiltro', {})
-			this.txtChip = null
-			this.radioGenero = null
-			this.indexElegido = null
+			// this.txtChip = null
+			// this.radioValue = null
+			// this.indexElegido = null
 		},
 	
 		// displayStatus(){
@@ -215,15 +240,15 @@ export default {
 		// },
 		filterGenero(value){
 			this.$store.commit('movie/actualizarFiltro', {idGenero:value})
-		this.indexElegido = null
-			this.txtChip = this.$store.state.movie.generos[value].nombre_es
+			// this.indexElegido = null
+			// this.txtChip = this.$store.state.movie.generos[value].nombre_es
 			
 		},
 		filterYear(index){
-			this.indexElegido = index
-				this.radioGenero = null
+			// this.indexElegido = index
+			// this.radioValue = null
 			this.$store.commit('movie/actualizarFiltro', {year:2000+index-1})
-			this.txtChip = 2000+index-1
+			// this.txtChip = 2000+index-1
 
 		}
 	}
