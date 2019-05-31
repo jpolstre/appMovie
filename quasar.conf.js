@@ -44,7 +44,11 @@ module.exports = function (ctx) {
         'QCardSection',
         'QSeparator',
         'QScrollArea',
-        'QToggle'
+        'QToggle',
+        'QInput',
+        'QRadio',
+        'QDate',
+        'QChip'
 
       ],
 

@@ -13,7 +13,7 @@ export default {
 	state: {
 		rememberLogin:{name:'', pass:'', tipo:''},
 		
-		filtro:{idGeneros:[1, 8], anio:'1998', titulo:'', director:'', reparto:['Daniel day Luis',], idCalidades:[]},
+		filtro:{idGenero:null, year:null, titulo:null, idCalidad:null, director:null, reparto:null },
 
 		paginaMeta: {},
 		usuario:{
@@ -84,49 +84,49 @@ export default {
 				id:1,
 				nombre_es:'Accion',
 				nombre_en:'',
-				imagen:'action-512.png',
+				imagen:'action-512.svg',
 				estado:false,
 			},
 			2:{
 				id:2,
 				nombre_es:'Animacion',
 				nombre_en:'',
-				imagen:'fantasy-512.png',
+				imagen:'fantasy-512.svg',
 				estado:false,
 			},
 			3:{
 				id:3,
 				nombre_es:'Aventura',
 				nombre_en:'',
-				imagen:'adventures-512.png',
+				imagen:'adventures-512.svg',
 				estado:false,
 			},
 			4:{
 				id:4,
 				nombre_es:'Ciencia Ficcion',
 				nombre_en:'',
-				imagen:'sci-fi-512.png',
+				imagen:'sci-fi-512.svg',
 				estado:false,
 			},
 			5:{
 				id:5,
 				nombre_es:'Crimen',
 				nombre_en:'',
-				imagen:'crime-512.png',
+				imagen:'crime-512.svg',
 				estado:false,
 			},
 			6:{
 				id:6,
 				nombre_es:'Documental',
 				nombre_en:'',
-				imagen:'documentary-512.png',
+				imagen:'documentary-512.svg',
 				estado:false,
 			},
 			7:{
 				id:7,
 				nombre_es:'Drama',
 				nombre_en:'',
-				imagen:'drama-512.png',
+				imagen:'drama-512.svg',
 				estado:false,
 			},
 			
@@ -135,42 +135,42 @@ export default {
 				id:8,
 				nombre_es:'Fantasia',
 				nombre_en:'',
-				imagen:'fantasy-512.png',
+				imagen:'fantasy-512.svg',
 				estado:false,
 			},
 			9:{
 				id:9,
 				nombre_es:'Guerra',
 				nombre_en:'',
-				imagen:'action-512.png',
+				imagen:'action-512.svg',
 				estado:false,
 			},
 			10:{
 				id:10,
 				nombre_es:'Romnace',
 				nombre_en:'',
-				imagen:'novel-512.png',
+				imagen:'novel-512.svg',
 				estado:false,
 			},
 			11:{
 				id:11,
 				nombre_es:'Suspenso',
 				nombre_en:'',
-				imagen:'triller-512.png',
+				imagen:'triller-512.svg',
 				estado:false,
 			},
 			12:{
 				id:12,
 				nombre_es:'Terror',
 				nombre_en:'',
-				imagen:'horror-512.png',
+				imagen:'horror-512.svg',
 				estado:false,
 			},
 			13:{
 				id:13,
 				nombre_es:'Western',
 				nombre_en:'',
-				imagen:'western-512.png',
+				imagen:'western-512.svg',
 				estado:true,
 			}
 
@@ -179,6 +179,16 @@ export default {
 
 	//mutaciones
 	mutations: {
+		actualizarFiltro(state, opt){
+			let keys = Object.keys(state.filtro)
+				keys.forEach(key=>{
+					if(opt[key]){
+					state.filtro[key] = opt[key]
+				}else{
+					state.filtro[key] = null
+				}
+			})
+		},
 
 		actualizarGeneros(state, idsGenerosTrue){
 

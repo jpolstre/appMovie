@@ -1,9 +1,10 @@
 <template>
-	<q-layout view="lHh Lpr lFf">
+	<!--  lHh full header-->
+	<q-layout view="lHr Lpr lFf" class="MyLayout">
 		<q-header elevated>
 			<q-toolbar>
 				<q-toolbar-title>
-					<q-icon name="local_movies"/> MovieApp
+					<q-icon name="local_movies"/> MovieTorrent
 				</q-toolbar-title>
 				<q-btn
 					flat
@@ -24,14 +25,16 @@
 			bordered
 			:width="290"
 			:breakpoint="1024"
-			content-class="bg-grey-3"
-			 show-if-above
+			content-class="bg-grey-3 overflow-hidden"
+			
 		>
-		<q-scroll-area class="fit">
+		<q-scroll-area class="fit" style="height:calc(100% - 110px);margin-top:110px;">
+			<q-separator/>
 			<q-list dense>
-					<q-item-label header>Filtrar</q-item-label>
+					
+			<!-- <q-separator/> -->
+					
 						<q-expansion-item
-							group="somegroup"
 							icon="explore"
 							label="Género	"
 							default-opened
@@ -43,33 +46,34 @@
 
 										<!-- <q-item-label header @click="displayStatus">Notifications</q-item-label> -->
 
-										     <q-item tag="label" v-ripple  v-for="genero in $store.state.movie.generos" :key="genero.id">
-										     	<q-item-section avatar>
-										     		<q-icon :name="`img:statics/generos/${genero.imagen}`"/>
+												 <q-item tag="label" v-ripple  v-for="genero in $store.state.movie.generos" :key="genero.id">
+													<q-item-section avatar>
+														<q-icon :name="`img:statics/generos/svg/${genero.imagen}`"/>
 
-										     	</q-item-section>
-										       <q-item-section>
-										         <q-item-label>{{genero.nombre_es}}</q-item-label>
-										       </q-item-section>
-										       <q-item-section side >
-										         <q-toggle color="blue" v-model="estados" :val="genero.id" @input="changeToggle"/>
-										       </q-item-section>
-										     </q-item>
+													</q-item-section>
+													 <q-item-section>
+														 <q-item-label>{{genero.nombre_es}}</q-item-label>
+													 </q-item-section>
+													 <q-item-section side >
+														 <!-- <q-toggle color="blue" v-model="estados" :val="genero.id" @input="changeToggle"/> -->
+														 <q-radio v-model="radioGenero" :val="genero.id" color="teal" @input="filterGenero"/>
+													 </q-item-section>
+												 </q-item>
 
-										   
+											 
 
 									<!-- 	<q-item tag="label" v-ripple   v-for="genero in $store.state.movie.generos" :key="genero.id">
 												<q-item-section avatar>
 													<q-icon :name="`img:statics/generos/${genero.imagen}`" />
 
 												</q-item-section>
-										        <q-item-section>
-										          <q-item-label>{{genero.nombre_es}}</q-item-label>
-										        </q-item-section>
-										        <q-item-section side >
-										          <q-toggle color="blue" v-model="estados[genero.id]" val="battery" />
-										        </q-item-section>
-										      </q-item>
+														<q-item-section>
+															<q-item-label>{{genero.nombre_es}}</q-item-label>
+														</q-item-section>
+														<q-item-section side >
+															<q-toggle color="blue" v-model="estados[genero.id]" val="battery" />
+														</q-item-section>
+													</q-item>
 				 -->
 			
 
@@ -91,19 +95,21 @@
 
 						<q-separator />
 
-						<q-expansion-item group="somegroup" icon="perm_identity" label="Second" header-class="text-teal">
+						<q-expansion-item icon="perm_identity" default-opened label="Año" header-class="text-teal">
 							<q-card>
 								<q-card-section>
-									Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti
-									commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste
-									eveniet doloribus ullam aliquid.
+									<div class="col full-height row items-center">
+										<div class="q-date__years-item flex flex-center q-mt-xs" v-for="index in 20" :key="index">
+											<q-btn :color="indexElegido==index?'primary':'white'" size="sm" :text-color="indexElegido==index?'white':'black'" :label="1999+index" @click.native="filterYear(index)"/>
+										</div>
+									</div>
 								</q-card-section>
 							</q-card>
 						</q-expansion-item>
 
 						<q-separator />
 
-						<q-expansion-item group="somegroup" icon="shopping_cart" label="Third" header-class="text-purple">
+						<q-expansion-item  icon="shopping_cart" default-opened label="Third" header-class="text-purple">
 							<q-card>
 								<q-card-section>
 									Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti
@@ -116,11 +122,11 @@
 						<q-separator />
 
 						<q-expansion-item
-							group="somegroup"
 							icon="bluetooth"
 							label="Fourth"
 							header-class="bg-teal text-white"
 							expand-icon-class="text-white"
+							default-opened
 						>
 							<q-card class="bg-teal-2">
 								<q-card-section>
@@ -132,6 +138,25 @@
 						</q-expansion-item>
 					</q-list>
 					</q-scroll-area>
+					<div class="absolute-top bg-white layout-drawer-toolbar"><form autocorrect="off" autocapitalize="off" autocomplete="off" spellcheck="false">
+
+						<q-input standout="bg-primary text-white" square  class="q-py-none q-my-none" v-model="search" placeholder="Buscar x titulo..." style="height: 50px;">	
+							<template v-slot:append>
+								<q-icon name="search" />
+							</template>
+						</q-input>
+			<q-separator/>
+
+						<div class="row justify-left q-py-sm q-pl-md bg-grey-3">
+							<strong>Filtro:</strong> <q-chip removable v-show="txtChip" @remove="resetFilter" color="primary" text-color="white" icon="movie_filter">    {{txtChip}}
+							</q-chip>
+						</div>
+		<!-- 				<q-item-label header ><strong>Filtro:</strong> <q-chip removable v-show="txtChip" @remove="resetFilter" color="primary" text-color="white" icon="movie_filter">
+				{{txtChip}}
+			</q-chip></q-item-label> -->
+						
+				
+					</form></div>
 		</q-drawer>
 
 		<q-page-container>
@@ -148,37 +173,71 @@ export default {
 	data () {
 		return {
 			drawerRight: this.$q.platform.is.desktop,
-			estados:[],
+			// estados:[],
+			year:2019,
+			search:'',
+			radioGenero:false,
+			indexElegido:null,
+			txtChip:null,
 		}
 	},
 	created(){
-		// console.log(this.$store.state.movie.generos)
-		for (let prop in this.$store.state.movie.generos) {
-
-		  if(this.$store.state.movie.generos[prop].estado){
-		  	this.estados.push(this.$store.state.movie.generos[prop].id)
-		  }
-		}
-	
-		console.log(this.estados)
+		// let keys = Object.keys(this.$store.state.movie.filtro)
+		// 	keys.forEach(key=>{
+		// 		if(opt[key]){
+		// 			switch(key){
+		// 				case 'idGenero':
+							
+		// 				break;
+		// 				case 'year':
+							
+		// 				break;
+		// 			}
+		// 		}
+		// })
+		
 	},
+	
 	methods: {
 		openURL,
-	
-		displayStatus(){
-			console.log(this.estados)
+		resetFilter(){
+			this.$store.commit('movie/actualizarFiltro', {})
+			this.txtChip = null
+			this.radioGenero = null
+			this.indexElegido = null
 		},
-		changeToggle(val){
-			// set defaul change generos
-			// console.log(val)//val = estados manda. los true
-			this.$store.commit('movie/actualizarGeneros', val)
+	
+		// displayStatus(){
+		// 	console.log(this.estados)
+		// },
+		// changeToggle(val){
+		// 	this.$store.commit('movie/actualizarGeneros', val)
+		// },
+		filterGenero(value){
+			this.$store.commit('movie/actualizarFiltro', {idGenero:value})
+		this.indexElegido = null
+			this.txtChip = this.$store.state.movie.generos[value].nombre_es
+			
+		},
+		filterYear(index){
+			this.indexElegido = index
+				this.radioGenero = null
+			this.$store.commit('movie/actualizarFiltro', {year:2000+index-1})
+			this.txtChip = 2000+index-1
 
 		}
 	}
 }
 </script>
 
-<style>
+<style lang="stylus">
+.MyLayout
+	// .mydrawer
+	// 	overflow hidden!important
+		
+	.q-field__control
+		height 50px!important
+
 </style>
 
 
