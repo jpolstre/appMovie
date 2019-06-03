@@ -147,7 +147,7 @@ export default {
 			},
 			10:{
 				id:10,
-				nombre_es:'Romnace',
+				nombre_es:'Romance',
 				nombre_en:'',
 				imagen:'novel-512.svg',
 				estado:false,

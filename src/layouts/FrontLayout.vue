@@ -100,7 +100,7 @@
 								<q-card-section>
 									<div class="col full-height row items-center">
 										<div class="q-date__years-item flex flex-center q-mt-xs" v-for="index in 20" :key="index">
-											<q-btn :color="$store.state.movie.filtro.year==1999+index?'primary':'white'" size="sm" :text-color="$store.state.movie.filtro.year==1999+index?'white':'black'" :label="1999+index" @click.native="filterYear(index)"/>
+											<q-btn :color="$store.state.movie.filtro.year==1999+index?'primary':'white'" size="sm" :text-color="$store.state.movie.filtro.year==1999+index?'white':'black'" :label="1999+index" @click="filterYear(index)"/>
 										</div>
 									</div>
 								</q-card-section>
@@ -169,7 +169,7 @@
 import { openURL } from 'quasar'
 
 export default {
-	name: 'MyLayout',
+	name: 'FrontLayout',
 	data () {
 		return {
 			drawerRight: this.$q.platform.is.desktop,

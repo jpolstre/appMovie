@@ -1,168 +1,184 @@
 // Configuration for your app
 
 module.exports = function (ctx) {
-  return {
-    // app boot file (/src/boot)
-    // --> boot files are part of "main.js"
-    boot: [
-      'i18n',
-      'axios'
-    ],
+	return {
+		// app boot file (/src/boot)
+		// --> boot files are part of "main.js"
+		boot: [
+			'i18n',
+			'axios'
+		],
 
-    css: [
-      'app.styl'
-    ],
+		css: [
+			'app.styl'
+		],
 
-    extras: [
-      'roboto-font',
-      'material-icons' // optional, you are not bound to it
-      // 'ionicons-v4',
-      // 'mdi-v3',
-      // 'fontawesome-v5',
-      // 'eva-icons'
-    ],
+		extras: [
+			'roboto-font',
+			'material-icons' // optional, you are not bound to it
+			// 'ionicons-v4',
+			// 'mdi-v3',
+			// 'fontawesome-v5',
+			// 'eva-icons'
+		],
 
-    framework: {
-      // all: true, // --- includes everything; for dev only!
+		framework: {
+			// all: true, // --- includes everything; for dev only!
 
-      components: [
-        'QLayout',
-        'QHeader',
-        'QDrawer',
-        'QPageContainer',
-        'QPage',
-        'QToolbar',
-        'QToolbarTitle',
-        'QBtn',
-        'QIcon',
-        'QList',
-        'QItem',
-        'QItemSection',
-        'QItemLabel',
-        'QExpansionItem',
-        'QCard',
-        'QCardSection',
-        'QSeparator',
-        'QScrollArea',
-        'QToggle',
-        'QInput',
-        'QRadio',
-        'QDate',
-        'QChip'
+			components: [
+				'QLayout',
+				'QHeader',
+				'QDrawer',
+				'QPageContainer',
+				'QPage',
+				'QToolbar',
+				'QToolbarTitle',
+				'QBtn',
+				'QIcon',
+				'QList',
+				'QItem',
+				'QItemSection',
+				'QItemLabel',
+				'QExpansionItem',
+				'QCard',
+				'QCardSection',
+				'QSeparator',
+				'QScrollArea',
+				'QToggle',
+				'QInput',
+				'QRadio',
+				'QDate',
+				'QChip',
+				'QSpace',
+				'QBtnDropdown',
+				'QAvatar',
+				'QTable',
+				'QBreadcrumbs',
+			  'QBreadcrumbsEl',
+			  'QImg',
+			  'QUploader',
+			  'QForm',
+			  'QPageSticky',
+			  'QFab',
+        'QFabAction',
+        'QDialog',
+        'QCardActions'
 
-      ],
 
-      directives: [
-        'Ripple'
-      ],
+			],
 
-      // Quasar plugins
-      plugins: [
-        'Notify'
-      ]
+			directives: [
+				'Ripple',
+				'ClosePopup'
+			],
 
-      // iconSet: 'ionicons-v4'
-      // lang: 'de' // Quasar language
-    },
+			// Quasar plugins
+			plugins: [
+				'Notify'
+			]
 
-    supportIE: false,
+			// iconSet: 'ionicons-v4'
+			// lang: 'de' // Quasar language
+		},
 
-    build: {
-      scopeHoisting: true,
-      // vueRouterMode: 'history',
-      // vueCompiler: true,
-      // gzip: true,
-      // analyze: true,
-      // extractCSS: false,
-      extendWebpack (cfg) {
-      }
-    },
+		supportIE: false,
 
-    devServer: {
-      // https: true,
-      // port: 8080,
-      open: true // opens browser window automatically
-    },
+		build: {
+			scopeHoisting: true,
+			vueRouterMode: 'history',
+			// vueCompiler: true,
+			// gzip: true,
+			// analyze: true,
+			// extractCSS: false,
+			extendWebpack (cfg) {
+			}
+		},
 
-    // animations: 'all', // --- includes all animations
-    animations: [],
+		devServer: {
+			// https: true,
+			// port: 8080,
+			open: true // opens browser window automatically
+		},
 
-    ssr: {
-      pwa: false
-    },
+		// animations: 'all', // --- includes all animations
+		animations: ['fadeIn', 'fadeOut'],
 
-    pwa: {
-      // workboxPluginMode: 'InjectManifest',
-      // workboxOptions: {}, // only for NON InjectManifest
-      manifest: {
-        // name: 'Quasar App',
-        // short_name: 'Quasar-PWA',
-        // description: 'Best PWA App in town!',
-        display: 'standalone',
-        orientation: 'portrait',
-        background_color: '#ffffff',
-        theme_color: '#027be3',
-        icons: [
-          {
-            'src': 'statics/icons/icon-128x128.png',
-            'sizes': '128x128',
-            'type': 'image/png'
-          },
-          {
-            'src': 'statics/icons/icon-192x192.png',
-            'sizes': '192x192',
-            'type': 'image/png'
-          },
-          {
-            'src': 'statics/icons/icon-256x256.png',
-            'sizes': '256x256',
-            'type': 'image/png'
-          },
-          {
-            'src': 'statics/icons/icon-384x384.png',
-            'sizes': '384x384',
-            'type': 'image/png'
-          },
-          {
-            'src': 'statics/icons/icon-512x512.png',
-            'sizes': '512x512',
-            'type': 'image/png'
-          }
-        ]
-      }
-    },
+		ssr: {
+			pwa: false
+		},
 
-    cordova: {
-      // id: 'org.cordova.quasar.app'
-      // noIosLegacyBuildFlag: true // uncomment only if you know what you are doing
-    },
+		pwa: {
+			// workboxPluginMode: 'InjectManifest',
+			// workboxOptions: {}, // only for NON InjectManifest
+			manifest: {
+				// name: 'Quasar App',
+				// short_name: 'Quasar-PWA',
+				// description: 'Best PWA App in town!',
+				display: 'standalone',
+				orientation: 'portrait',
+				background_color: '#ffffff',
+				theme_color: '#027be3',
+				icons: [
+					{
+						'src': 'statics/icons/icon-128x128.png',
+						'sizes': '128x128',
+						'type': 'image/png'
+					},
+					{
+						'src': 'statics/icons/icon-192x192.png',
+						'sizes': '192x192',
+						'type': 'image/png'
+					},
+					{
+						'src': 'statics/icons/icon-256x256.png',
+						'sizes': '256x256',
+						'type': 'image/png'
+					},
+					{
+						'src': 'statics/icons/icon-384x384.png',
+						'sizes': '384x384',
+						'type': 'image/png'
+					},
+					{
+						'src': 'statics/icons/icon-512x512.png',
+						'sizes': '512x512',
+						'type': 'image/png'
+					}
+				]
+			}
+		},
 
-    electron: {
-      // bundler: 'builder', // or 'packager'
+		cordova: {
+			// id: 'org.cordova.quasar.app'
+			// noIosLegacyBuildFlag: true // uncomment only if you know what you are doing
+		},
 
-      extendWebpack (cfg) {
-        // do something with Electron main process Webpack cfg
-        // chainWebpack also available besides this extendWebpack
-      },
+		electron: {
+			// bundler: 'builder', // or 'packager'
 
-      packager: {
-        // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
+			extendWebpack (cfg) {
+				// do something with Electron main process Webpack cfg
+				// chainWebpack also available besides this extendWebpack
+			},
 
-        // OS X / Mac App Store
-        // appBundleId: '',
-        // appCategoryType: '',
-        // osxSign: '',
-        // protocol: 'myapp://path',
+			packager: {
+				// https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
 
-        // Window only
-        // win32metadata: { ... }
-      },
+				// OS X / Mac App Store
+				// appBundleId: '',
+				// appCategoryType: '',
+				// osxSign: '',
+				// protocol: 'myapp://path',
 
-      builder: {
-        // https://www.electron.build/configuration/configuration
+				// Window only
+				// win32metadata: { ... }
+			},
 
-        // appId: 'quasar-app'
-      }
-    }
-  }
+			builder: {
+				// https://www.electron.build/configuration/configuration
+
+				// appId: 'quasar-app'
+			}
+		}
+	}
 }
