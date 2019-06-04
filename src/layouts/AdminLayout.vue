@@ -79,7 +79,7 @@
 				:duration="100" 
 				
 			>
-				<q-scroll-area style="height: calc(100vh - 50px); max-width: 100%;">
+				<q-scroll-area style="height: calc(100vh - 230px); max-width: 100%;">
 					<router-view />
 
 				</q-scroll-area>

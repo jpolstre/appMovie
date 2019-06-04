@@ -111,21 +111,57 @@
 				</div>
 
 			</div>
-			<q-dialog v-model="dialogSearch" full-width>
-				<q-card>
+			<!-- full-width -->
+			<q-dialog v-model="dialogSearch"  class="scroll-none" @hide="()=>{
+				loadingState=false
+				searchText = null
+			}" @show="()=>{
+
+				$refs.inputSearch.focus()
+			}">
+				<q-card style="width: 700px; max-width: 80vw;">
 					<q-card-section>
-						<div class="text-h6" align="center"><q-icon name="search" color="black" style="font-size: 26px;" />Buscar En FilmAfinitty</div>
+						<div class="text-h6" align="center">Buscar en Filmafinitty</div>
 					</q-card-section>
 
 					<q-separator />
 
-					<q-card-section style="height: 75vh" class="scroll">
-						<p v-for="n in 15" :key="n">Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum repellendus sit voluptate voluptas eveniet porro. Rerum blanditiis perferendis totam, ea at omnis vel numquam exercitationem aut, natus minima, porro labore.</p>
+					<q-card-section style="height:calc(100vh - 170px);" class="scroll">
+					
+						<q-form
+							@submit="onSearch"
+							
+							class="q-gutter-md"
+						  >
+							<q-input
+								ref ='inputSearch' 
+								standout="bg-primary text-white"
+								v-model.trim="searchText"
+								label="Presiona enter para buscar"
+								:loading="loadingState"
+								:disable ="loadingState"
+							>
+							<template v-if="searchText && !loadingState" v-slot:append>
+							         <q-icon name="cancel" @click.stop="searchText = null" class="cursor-pointer" />
+							       </template>
+							</q-input>
+						</q-form>
+						
+						<div class="padding">
+							<p class="caption q-mt-md">15 resultados(elije uno):</p>
+							<q-card v-for="n in 15" :key="n" class="q-mt-xs">
+								<q-card-section>
+									<a href="#" >Titulo n</a>
+								</q-card-section>	
+							</q-card>
+
+						</div>
+							
 					</q-card-section>
 
 					<q-separator />
 
-					<q-card-actions align="center">
+					<q-card-actions align="right">
 						<q-btn flat label="Cerrar" icon="close" color="primary" v-close-popup />
 						<!-- <q-btn flat label="Accept" color="primary" v-close-popup /> -->
 					</q-card-actions>
@@ -143,7 +179,9 @@
 		export default {
 			data () {
 				return {
+					loadingState:false,
 					dialogSearch:false,
+					searchText:null,
 					form:{
 						nombre: null,
 						anio: null,
@@ -159,12 +197,27 @@
 			},
 
 			methods: {
+				onSearch(){
+					
+					if(!this.searchText){
+						this.$q.notify({
+							color: 'red-5',
+							textColor: 'white',
+							icon: 'warning',
+							message: 'Debes introducir un titulo'
+						})
+						this.searchText = null
+
+					}else{
+						this.loadingState = true
+					}
+				},
 				onSubmit () {
 					if (this.accept !== true) {
 						this.$q.notify({
 							color: 'red-5',
 							textColor: 'white',
-							icon: 'fas fa-exclamation-triangle',
+							icon: 'warning',
 							message: 'You need to accept the license and terms first'
 						})
 					}
