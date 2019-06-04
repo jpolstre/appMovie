@@ -115,11 +115,12 @@
 			<q-dialog v-model="dialogSearch"  class="scroll-none" @hide="()=>{
 				loadingState=false
 				searchText = null
+				resultados = null
 			}" @show="()=>{
 
 				$refs.inputSearch.focus()
 			}">
-				<q-card style="width: 700px; max-width: 80vw;">
+				<q-card style="width: 800px; max-width: 90vw;" v-if="!swfilm">
 					<q-card-section>
 						<div class="text-h6" align="center">Buscar en Filmafinitty</div>
 					</q-card-section>
@@ -132,7 +133,7 @@
 							@submit="onSearch"
 							
 							class="q-gutter-md"
-						  >
+							>
 							<q-input
 								ref ='inputSearch' 
 								standout="bg-primary text-white"
@@ -142,19 +143,57 @@
 								:disable ="loadingState"
 							>
 							<template v-if="searchText && !loadingState" v-slot:append>
-							         <q-icon name="cancel" @click.stop="searchText = null" class="cursor-pointer" />
-							       </template>
+											 <q-icon name="cancel" @click.stop="()=>{
+											 	searchText = null
+											 	resultados=null
+											 }" class="cursor-pointer" />
+										 </template>
 							</q-input>
 						</q-form>
 						
-						<div class="padding">
-							<p class="caption q-mt-md">15 resultados(elije uno):</p>
-							<q-card v-for="n in 15" :key="n" class="q-mt-xs">
+						<div v-if="resultados">
+							<!-- <p class="caption q-mt-md">{{resultados.length}} resultados (elije uno):</p> -->
+			<!-- 				<q-card v-for="resultado, index in resultados" :key="index" class="q-mt-xs">
 								<q-card-section>
-									<a href="#" >Titulo n</a>
+									<a :href="`https://www.filmaffinity.com/es/film${resultado.id}.html`" target="_blank"><q-icon :name="`img:https://www.filmaffinity.com/images/com/categories/FA_1000x1000.jpg`"/>{{resultado.titulo}}</a>
+									<p>{{resultado.desc}}</p>
 								</q-card-section>	
-							</q-card>
+							</q-card> -->
 
+
+							<q-list bordered separator>
+								<q-item-label header>{{resultados.length}} resultados (elije uno):</q-item-label>
+								<q-item v-for="resultado, index in resultados" :key="index">
+									<q-item-section top avatar>
+									          <q-avatar rounded>
+									            <img src="statics/FA.png">
+									          </q-avatar>
+									        </q-item-section>
+								  <q-item-section>
+								    <q-item-label>
+								    	<!-- <a :href="`https://www.filmaffinity.com/es/film${resultado.id}.html`" target="_blank">{{resultado.titulo}}</a> -->
+								    	<span class="cursor-pointer text-indigo" style="text-decoration: underline;" @click="getMovieRawHtml(resultado)">{{resultado.titulo}}</span>
+								    </q-item-label>
+								    <q-item-label caption>
+								    	{{resultado.desc}}
+								    </q-item-label>
+								  </q-item-section>
+								  <q-item-section top side>
+								            <div class="text-blue-8 q-gutter-xs">
+								              <!-- <q-btn class="gt-xs" size="12px" flat dense round icon="delete" /> -->
+								              <q-btn class="gt-xs" size="12px" flat  round icon="done" />
+								              <!-- <q-btn size="12px" flat dense round icon="more_vert" /> -->
+								            </div>
+								          </q-item-section>
+								</q-item>
+
+								
+									
+							</q-list>
+
+						</div>
+						<div v-else>
+							<p class="caption q-mt-md">Ningun resultado</p>
 						</div>
 							
 					</q-card-section>
@@ -164,6 +203,24 @@
 					<q-card-actions align="right">
 						<q-btn flat label="Cerrar" icon="close" color="primary" v-close-popup />
 						<!-- <q-btn flat label="Accept" color="primary" v-close-popup /> -->
+					</q-card-actions>
+				</q-card>
+
+				<q-card style="width: 100%; max-width: 100vw;" v-else>
+					<q-card-section>
+						<div class="text-h6" align="center">{{filmVer.titulo}}</div>
+
+					</q-card-section>
+					<q-separator />
+
+					<q-card-section style="height:calc(100vh - 170px);" class="scroll" v-html="rawHtml" >
+						<!-- <iframe style="width: 100%; height:100%;overflow: hidden;" :src="`${$store.state.movie.baseUrl}view_movie/${filmVer.id}`"  frameborder="0"></iframe> -->
+						
+					</q-card-section>
+					<q-card-actions align="right">
+						<q-btn flat label="Elegir otra	" color="primary" @click="swfilm = false" />
+						
+						<q-btn flat label="Elgir Esta pelicula" icon="done" color="primary" @click="" />
 					</q-card-actions>
 				</q-card>
 			</q-dialog>
@@ -179,9 +236,14 @@
 		export default {
 			data () {
 				return {
+					rawHtml:'Nala',
 					loadingState:false,
 					dialogSearch:false,
 					searchText:null,
+					resultados:null,
+					swfilm:false,
+					filmElegido:{},
+					filmVer:{},
 					form:{
 						nombre: null,
 						anio: null,
@@ -197,8 +259,30 @@
 			},
 
 			methods: {
+				getMovieRawHtml(filmSelec){
+					const this_ = this
+					this.filmVer = filmSelec
+					this.swfilm=true
+					// this.loading = true
+					this_.$axios.get(`${this_.$store.state.movie.baseUrl}view_movie/${this_.filmVer.id}`)
+					.then(r=>{
+						this_.rawHtml = r.data
+						// console.log(r.data)
+
+						// this_.loading = false
+					})
+					.catch(r => {
+						// this_.loading = false
+
+						this.$q.create({
+							message: 'Error En El Servidor.',
+							position: 'bottom',
+							icon:'warning',
+							color:'negative'
+						})
+					})
+				},
 				onSearch(){
-					
 					if(!this.searchText){
 						this.$q.notify({
 							color: 'red-5',
@@ -210,6 +294,35 @@
 
 					}else{
 						this.loadingState = true
+						const this_ = this
+						let sendFormData = new FormData()
+						sendFormData.append('param_busqueda', this.searchText)
+						this_.$axios({
+							method: 'post',
+							url:`${this_.$store.state.movie.baseUrl}search_movie`,
+							data:sendFormData,
+							config: { headers: {'Content-Type': 'multipart/form-data' }}
+						}).then(r => {
+							this_.loadingState = false
+
+							if(r.data.resultados){
+								this_.resultados = r.data.resultados 
+
+							}else{
+								this_.resultados = null
+							
+							}
+					
+						}).catch(r => {
+							this_.loadingState = false
+							this.$q.create({
+								message: 'Error En El Servidor.',
+								position: 'top',
+								icon:'warning',
+								color:'negative'
+							})
+						})
+
 					}
 				},
 				onSubmit () {

@@ -2,9 +2,9 @@
 
 // import axios from 'axios'
 
-const  url = 'https://swisslog-bolivia.com/'
+// const  url = 'https://swisslog-bolivia.com/'
 
-// const  url = 'http://localhost/swweb/'
+const  url = 'http://localhost/apimovie/'
 
 export default {
 	namespaced: true,
