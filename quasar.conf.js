@@ -62,7 +62,9 @@ module.exports = function (ctx) {
 			  'QFab',
         'QFabAction',
         'QDialog',
-        'QCardActions'
+        'QCardActions',
+				'QRating'
+
 
 
 			],

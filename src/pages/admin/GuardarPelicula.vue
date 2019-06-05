@@ -116,6 +116,7 @@
 				loadingState=false
 				searchText = null
 				resultados = null
+				swfilm = false
 			}" @show="()=>{
 
 				$refs.inputSearch.focus()
@@ -144,8 +145,8 @@
 							>
 							<template v-if="searchText && !loadingState" v-slot:append>
 											 <q-icon name="cancel" @click.stop="()=>{
-											 	searchText = null
-											 	resultados=null
+												searchText = null
+												resultados=null
 											 }" class="cursor-pointer" />
 										 </template>
 							</q-input>
@@ -165,26 +166,26 @@
 								<q-item-label header>{{resultados.length}} resultados (elije uno):</q-item-label>
 								<q-item v-for="resultado, index in resultados" :key="index">
 									<q-item-section top avatar>
-									          <q-avatar rounded>
-									            <img src="statics/FA.png">
-									          </q-avatar>
-									        </q-item-section>
-								  <q-item-section>
-								    <q-item-label>
-								    	<!-- <a :href="`https://www.filmaffinity.com/es/film${resultado.id}.html`" target="_blank">{{resultado.titulo}}</a> -->
-								    	<span class="cursor-pointer text-indigo" style="text-decoration: underline;" @click="getMovieRawHtml(resultado)">{{resultado.titulo}}</span>
-								    </q-item-label>
-								    <q-item-label caption>
-								    	{{resultado.desc}}
-								    </q-item-label>
-								  </q-item-section>
-								  <q-item-section top side>
-								            <div class="text-blue-8 q-gutter-xs">
-								              <!-- <q-btn class="gt-xs" size="12px" flat dense round icon="delete" /> -->
-								              <q-btn class="gt-xs" size="12px" flat  round icon="done" />
-								              <!-- <q-btn size="12px" flat dense round icon="more_vert" /> -->
-								            </div>
-								          </q-item-section>
+														<q-avatar rounded>
+															<img src="statics/FA.png">
+														</q-avatar>
+													</q-item-section>
+									<q-item-section>
+										<q-item-label>
+											<!-- <a :href="`https://www.filmaffinity.com/es/film${resultado.id}.html`" target="_blank">{{resultado.titulo}}</a> -->
+											<span class="cursor-pointer text-indigo" style="text-decoration: underline;" @click="getMovieRawHtml(resultado)">{{resultado.titulo}}</span>
+										</q-item-label>
+										<q-item-label caption>
+											{{resultado.desc}}
+										</q-item-label>
+									</q-item-section>
+									<q-item-section top side>
+														<div class="text-blue-8 q-gutter-xs">
+															<!-- <q-btn class="gt-xs" size="12px" flat dense round icon="delete" /> -->
+															<q-btn class="gt-xs" size="12px" flat  round icon="done" />
+															<!-- <q-btn size="12px" flat dense round icon="more_vert" /> -->
+														</div>
+													</q-item-section>
 								</q-item>
 
 								
@@ -207,20 +208,58 @@
 				</q-card>
 
 				<q-card style="width: 100%; max-width: 100vw;" v-else>
-					<q-card-section>
-						<div class="text-h6" align="center">{{filmVer.titulo}}</div>
+					<q-card-section class="text-h6 q-my-xs q-py-xs">
+						<div  align="center">{{filmVer.titulo}}</div>
 
 					</q-card-section>
 					<q-separator />
 
-					<q-card-section style="height:calc(100vh - 170px);" class="scroll" v-html="rawHtml" >
+					<q-card-section style="height:calc(100vh - 270px);" class="scroll">
+						<div class="row ">
+							<div class="col-sm-12 col-md-6 q-mt-sm q-pl-md" align="center">
+								<!-- <img :src="`${$store.state.movie.baseUrl}getImagen/${rawHtml.imagen}`" :alt="rawHtml.imagen">  -->
+								<q-img :src="`${$store.state.movie.baseUrl}getImagen/${rawHtml.imagen}`" style="width: 250px" v-if="rawHtml.imagen">
+									<div class="absolute-bottom text-body1 text-center">
+										 <q-rating
+											v-show="rawHtml.ratingn"
+											v-model="rawHtml.ratingn"
+											size="1.2em"
+											color="orange"
+											:max="10"
+											readonly
+											/>
+									</div>
+								</q-img>
+								
+								<!-- <q-img
+									 src="https://cdn.quasar.dev/img/non-existent-image-src.png"
+									style="width: 350px"
+									v-else>
+								 <template v-slot:error>
+									 <div class="absolute-full flex flex-center bg-negative text-white">
+										 Cannot load image
+									 </div>
+								 </template>
+							 </q-img> -->
+
+								<div v-html="rawHtml.rating" class="flex justify-center q-mt-sm"></div>
+							</div>
+
+							<div class="col-sm-12 col-md-6" v-html="rawHtml.movieInfo" align="left"></div>
+							
+						</div>
+				
+
 						<!-- <iframe style="width: 100%; height:100%;overflow: hidden;" :src="`${$store.state.movie.baseUrl}view_movie/${filmVer.id}`"  frameborder="0"></iframe> -->
-						
+						<!-- <img src="http://apimovie.corprotec.com/getImagen" alt="imagen"> ok good bien-->
 					</q-card-section>
+						<q-separator />
 					<q-card-actions align="right">
-						<q-btn flat label="Elegir otra	" color="primary" @click="swfilm = false" />
-						
-						<q-btn flat label="Elgir Esta pelicula" icon="done" color="primary" @click="" />
+						<q-btn  label="Elegir otra	" color="primary" class="q-mr-xs" @click="()=>{
+							swfilm = false
+							rawHtml = {}
+						}" />
+						<q-btn  label="Elgir Esta pelicula" icon="done" color="primary" @click="" />
 					</q-card-actions>
 				</q-card>
 			</q-dialog>
@@ -236,7 +275,8 @@
 		export default {
 			data () {
 				return {
-					rawHtml:'Nala',
+
+					rawHtml:{},
 					loadingState:false,
 					dialogSearch:false,
 					searchText:null,
@@ -267,6 +307,7 @@
 					this_.$axios.get(`${this_.$store.state.movie.baseUrl}view_movie/${this_.filmVer.id}`)
 					.then(r=>{
 						this_.rawHtml = r.data
+						this_.rawHtml.ratingn = Math.round(this_.rawHtml.ratingn*1)
 						// console.log(r.data)
 
 						// this_.loading = false
@@ -274,7 +315,7 @@
 					.catch(r => {
 						// this_.loading = false
 
-						this.$q.create({
+						this.$q.notify({
 							message: 'Error En El Servidor.',
 							position: 'bottom',
 							icon:'warning',
@@ -315,7 +356,7 @@
 					
 						}).catch(r => {
 							this_.loadingState = false
-							this.$q.create({
+							this.$q.notify({
 								message: 'Error En El Servidor.',
 								position: 'top',
 								icon:'warning',
@@ -361,3 +402,63 @@
 			}
 		}
 	</script>
+	<style lang="stylus">
+		.movie-info dd {
+				margin: 8px 5px 8px 105px;
+				color: #333333;
+				font-size: 14px;
+				line-height: 18px;
+		}
+
+		.movie-info dt {
+				position: absolute;
+				width: 90px;
+				text-align: right;
+				color: #777777;
+				margin-top: 1px;
+		}
+
+		 #rat-avg-container {
+				text-align: center;
+				padding-bottom: 10px;
+		}
+
+		#movie-rat-avg 
+			float left
+			font-size:184%
+			color #fff
+			padding 5px
+			background #4682B4
+		
+		#movie-count-rat
+			text-align center
+			color #326E9C
+			font-size 84%
+			padding 6px 5px
+			float left
+			margin-left 8px;
+			font-weight bold
+			border 1px solid #4682B4
+			background #fff
+		
+		#country-img
+			img
+				margin-top -3px
+				vertical-align middle
+		
+		.show-akas {
+		    margin-left: 10px;
+		    font-size: 12px;
+		    color: #888;
+		    cursor: pointer;
+		    border: 1px solid #DDD;
+		    background: #F8F8F8;
+		    padding: 0 2px;
+		}
+		
+		.akas > ul {
+		    list-style-type: none;
+		    margin: 0;
+		    padding: 0;
+		}
+	</style>
