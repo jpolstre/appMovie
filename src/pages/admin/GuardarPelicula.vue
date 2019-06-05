@@ -214,11 +214,13 @@
 					</q-card-section>
 					<q-separator />
 
-					<q-card-section style="height:calc(100vh - 270px);" class="scroll">
+					<q-card-section style="height:calc(100vh - 150px);" class="scroll">
 						<div class="row ">
 							<div class="col-sm-12 col-md-6 q-mt-sm q-pl-md" align="center">
 								<!-- <img :src="`${$store.state.movie.baseUrl}getImagen/${rawHtml.imagen}`" :alt="rawHtml.imagen">  -->
-								<q-img :src="`${$store.state.movie.baseUrl}getImagen/${rawHtml.imagen}`" style="width: 250px" v-if="rawHtml.imagen">
+
+
+								<q-img class="q-card" :src="`${$store.state.movie.baseUrl}getImagen/${rawHtml.imagen}`" style="width: 250px" v-if="rawHtml.imagen">
 									<div class="absolute-bottom text-body1 text-center">
 										 <q-rating
 											v-show="rawHtml.ratingn"
@@ -255,11 +257,11 @@
 					</q-card-section>
 						<q-separator />
 					<q-card-actions align="right">
-						<q-btn  label="Elegir otra	" color="primary" class="q-mr-xs" @click="()=>{
+						<q-btn  size="sm"  label="Elegir otra	" color="primary" class="q-mr-xs" @click="()=>{
 							swfilm = false
 							rawHtml = {}
 						}" />
-						<q-btn  label="Elgir Esta pelicula" icon="done" color="primary" @click="" />
+						<q-btn  size="sm"  label="Elgir Esta pelicula" icon="done" color="primary" @click="" />
 					</q-card-actions>
 				</q-card>
 			</q-dialog>
