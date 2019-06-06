@@ -16,112 +16,163 @@
 					</div>
 				</q-img> -->
 				<!-- </div> -->
+					<!-- full-width q-gutter-sm -->
 
-				<div class="row">
-					<div class="col-sm-12 col-md-6 ">
+			<!-- 		form para nuevo anterior
 						<q-form
-						@submit="onSubmit"
-						@reset="onReset"
-						class="full-width q-gutter-sm"
+							@submit="onSubmit"
+							@reset="onReset"
+							class="row"
 						>
-						<q-uploader
-						dense
-						hide-upload-btn
-						url="http://localhost:4444/upload"
-						label="Imagenes"
-						multiple
-						accept=".jpg, image/*"
-						style="max-width: 300px"
-						/>
-						<q-input
-						dense
-						filled
-						v-model="form.nombre"
-						label="Titulo *"
-						lazy-rules
-						:rules="[ val => val && val.length > 0 || 'El titulo es obligatorio']"
-						/>
+					
+						<div class="col-xs-12 col-sm-12 col-md-5" align="center">
 
-						<q-input
-						dense
-						filled
-						type="number"
-						v-model="form.anio"
-						label="Año *"
-						lazy-rules
-						:rules="[
-						val => val !== null && val !== '' || 'El Año es obligatorio',
-						val => val > 1999 && val < 2020 || 'Rango: 2000-2019'
-						]"
-						/>
-						<q-input
-						dense
-						filled
-						type="textarea"
-						v-model="form.sinopsis"
-						label="Sinopsis *"
-						lazy-rules
-						:rules="[ val => val && val.length > 0 || 'La sinopsis es obligatoria']"
-						/>
+							<q-uploader
+								dense
+								hide-upload-btn
+								url="http://localhost:4444/upload"
+								label="Imagenes"
+								multiple
+								accept=".jpg, image/*"
+								style="max-width: 300px"
 
-						<q-input
-						dense
-						filled
-						type="textarea"
-						v-model="form.detallestecnicos"
-						label="Detalles Tecnicos Del Ripeado*"
-						lazy-rules
-						:rules="[ val => val && val.length > 0 || 'Los detalles tecnicos son obligatorios']"
-						/>
-						<q-toggle v-model="form.estado" label="Habilitada" />
+							/>
 
-						<q-input
-						dense
-						filled
-						v-model="form.traileruri"
-						label="Trailer url"
-						lazy-rules
-
-						/>
-
-						<q-input
-						dense
-						filled
-						v-model="form.idfilmafinitty"
-						label="Codigo FilmAfinitty"
-						lazy-rules
-
-						/>
-						<q-input
-						dense
-						filled
-						v-model="form.idimdb"
-						label="Codigo IMDb"
-						lazy-rules
-
-						/>
-
-
-
-						<div>
-							<q-btn label="Guardar" type="submit" color="primary"/>
-							<q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
+						
+						
 						</div>
-					</q-form>
+
+						<div class="col-xs-12 col-sm-12 col-md-7" >
+							<div class="q-mt-md">
+								<q-input
+								dense
+								filled
+								v-model="form.nombre"
+								label="Titulo *"
+								lazy-rules
+								:rules="[ val => val && val.length > 0 || 'El titulo es obligatorio']"
+								/>
+
+								<q-input
+								dense
+								filled
+								type="number"
+								v-model="form.anio"
+								label="Año *"
+								lazy-rules
+								:rules="[
+								val => val !== null && val !== '' || 'El Año es obligatorio',
+								val => val > 1999 && val < 2020 || 'Rango: 2000-2019'
+								]"
+								/>
+								<q-input
+								dense
+								filled
+								type="textarea"
+								v-model="form.sinopsis"
+								label="Sinopsis *"
+								lazy-rules
+								:rules="[ val => val && val.length > 0 || 'La sinopsis es obligatoria']"
+								/>
+
+								<q-input
+								dense
+								filled
+								type="textarea"
+								v-model="form.detallestecnicos"
+								label="Detalles Tecnicos Del Ripeado*"
+								lazy-rules
+								:rules="[ val => val && val.length > 0 || 'Los detalles tecnicos son obligatorios']"
+								/>
+								<q-toggle v-model="form.estado" label="Habilitada" />
+
+								<q-input
+								class="q-mt-md"
+								dense
+								filled
+								v-model="form.traileruri"
+								label="Trailer url"
+								lazy-rules
+
+								/>
+
+								<q-input
+								class="q-mt-md"
+								dense
+								filled
+								v-model="form.idfilmafinitty"
+								label="Codigo FilmAfinitty"
+								lazy-rules
+
+								/>
+								<q-input
+								class="q-mt-md"
+								dense
+								filled
+								v-model="form.idimdb"
+								label="Codigo IMDb"
+								lazy-rules
+
+								/>
+								<div class="q-mt-xl">
+									<q-btn label="Guardar" type="submit" color="primary"/>
+									<q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
+								</div>
+							</div>
+						</div>
+					</q-form> -->
+			<!-- full-width -->
+			
+			<div class="row" v-if="swfilm">
+				<div class="col-xs-12 col-sm-12 col-md-4 q-mt-sm q-pl-md" align="center">
+					<!-- <img :src="`${$store.state.movie.baseUrl}getImagen/${rawHtml.imagen}`" :alt="rawHtml.imagen">  -->
+					<q-img class="q-card" :src="`${$store.state.movie.baseUrl}getImagen/${rawHtml.imagen}`" style="width: 250px" v-if="rawHtml.imagen">
+						<div class="absolute-bottom text-body1 text-center">
+							 <q-rating
+								v-show="rawHtml.ratingn"
+								v-model="rawHtml.ratingn"
+								size="1.2em"
+								color="orange"
+								:max="10"
+								readonly
+								/>
+						</div>
+					</q-img>
+					
+					<!-- <q-img
+						 src="https://cdn.quasar.dev/img/non-existent-image-src.png"
+						style="width: 350px"
+						v-else>
+					 <template v-slot:error>
+						 <div class="absolute-full flex flex-center bg-negative text-white">
+							 Cannot load image
+						 </div>
+					 </template>
+				 </q-img> -->
+
+					<div v-html="rawHtml.rating" class="flex justify-center q-mt-sm"></div>
 				</div>
 
+				<div class="col-xs-12 col-sm-12 col-md-8" v-html="rawHtml.movieInfo" align="left"></div>
+
+				<div class="q-py-md col-xs-12 q-mt-xl" align="center">
+					<q-btn icon="save" label="Guardar" type="submit" color="primary"/>
+					<q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
+				</div>
+				
 			</div>
-			<!-- full-width -->
+
 			<q-dialog v-model="dialogSearch"  class="scroll-none" @hide="()=>{
 				loadingState=false
-				searchText = null
-				resultados = null
-				swfilm = false
+				// searchText = null
+				// resultados = null
+				// swfilm = false
 			}" @show="()=>{
 
 				$refs.inputSearch.focus()
 			}">
-				<q-card style="width: 800px; max-width: 90vw;" v-if="!swfilm">
+			<!-- v-if="!swfilm" -->
+				<q-card style="width: 800px; max-width: 90vw;">
 					<q-card-section>
 						<div class="text-h6" align="center">Buscar en Filmafinitty</div>
 					</q-card-section>
@@ -173,10 +224,12 @@
 									<q-item-section>
 										<q-item-label>
 											<!-- <a :href="`https://www.filmaffinity.com/es/film${resultado.id}.html`" target="_blank">{{resultado.titulo}}</a> -->
-											<span class="cursor-pointer text-indigo" style="text-decoration: underline;" @click="getMovieRawHtml(resultado)">{{resultado.titulo}}</span>
+											<span class="cursor-pointer text-indigo" style="text-decoration: underline;" v-html="resultado.titulo" @click="getMovieRawHtml(resultado)">
+												<!-- {{resultado.titulo}} -->
+											</span>
 										</q-item-label>
-										<q-item-label caption>
-											{{resultado.desc}}
+										<q-item-label  v-html="resultado.desc" caption>
+											<!-- {{resultado.desc}} -->
 										</q-item-label>
 									</q-item-section>
 									<q-item-section top side>
@@ -207,19 +260,15 @@
 					</q-card-actions>
 				</q-card>
 
-				<q-card style="width: 100%; max-width: 100vw;" v-else>
+		<!-- 		<q-card style="width: 100%; max-width: 100vw;" v-else>
 					<q-card-section class="text-h6 q-my-xs q-py-xs">
-						<div  align="center">{{filmVer.titulo}}</div>
-
+						<div  v-html="filmVer.titulo" align="center" ></div>
 					</q-card-section>
 					<q-separator />
-
 					<q-card-section style="height:calc(100vh - 150px);" class="scroll">
 						<div class="row ">
 							<div class="col-sm-12 col-md-6 q-mt-sm q-pl-md" align="center">
-								<!-- <img :src="`${$store.state.movie.baseUrl}getImagen/${rawHtml.imagen}`" :alt="rawHtml.imagen">  -->
-
-
+								comentar esta linea <img :src="`${$store.state.movie.baseUrl}getImagen/${rawHtml.imagen}`" :alt="rawHtml.imagen">  
 								<q-img class="q-card" :src="`${$store.state.movie.baseUrl}getImagen/${rawHtml.imagen}`" style="width: 250px" v-if="rawHtml.imagen">
 									<div class="absolute-bottom text-body1 text-center">
 										 <q-rating
@@ -232,28 +281,10 @@
 											/>
 									</div>
 								</q-img>
-								
-								<!-- <q-img
-									 src="https://cdn.quasar.dev/img/non-existent-image-src.png"
-									style="width: 350px"
-									v-else>
-								 <template v-slot:error>
-									 <div class="absolute-full flex flex-center bg-negative text-white">
-										 Cannot load image
-									 </div>
-								 </template>
-							 </q-img> -->
-
 								<div v-html="rawHtml.rating" class="flex justify-center q-mt-sm"></div>
 							</div>
-
 							<div class="col-sm-12 col-md-6" v-html="rawHtml.movieInfo" align="left"></div>
-							
 						</div>
-				
-
-						<!-- <iframe style="width: 100%; height:100%;overflow: hidden;" :src="`${$store.state.movie.baseUrl}view_movie/${filmVer.id}`"  frameborder="0"></iframe> -->
-						<!-- <img src="http://apimovie.corprotec.com/getImagen" alt="imagen"> ok good bien-->
 					</q-card-section>
 						<q-separator />
 					<q-card-actions align="right">
@@ -263,7 +294,8 @@
 						}" />
 						<q-btn  size="sm"  label="Elgir Esta pelicula" icon="done" color="primary" @click="" />
 					</q-card-actions>
-				</q-card>
+				</q-card> -->
+
 			</q-dialog>
 			
 
@@ -274,13 +306,17 @@
 		</q-page>
 	</template>
 	<script>
+
+
 		export default {
+		
+
 			data () {
 				return {
 
 					rawHtml:{},
 					loadingState:false,
-					dialogSearch:false,
+					dialogSearch:true,
 					searchText:null,
 					resultados:null,
 					swfilm:false,
@@ -299,6 +335,18 @@
 
 				}
 			},
+			created(){
+				const this_ = this
+				document.saludo = function(txt){//ok
+						// alert(txt.trim());
+						this_.searchText = txt.trim()
+						this_.swfilm = true
+						// this_.rawHtml={}
+						this_.dialogSearch = true
+						this_.onSearch()
+
+				}  
+			},
 
 			methods: {
 				getMovieRawHtml(filmSelec){
@@ -310,6 +358,8 @@
 					.then(r=>{
 						this_.rawHtml = r.data
 						this_.rawHtml.ratingn = Math.round(this_.rawHtml.ratingn*1)
+
+						this_.dialogSearch = false
 						// console.log(r.data)
 
 						// this_.loading = false
