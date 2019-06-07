@@ -1,5 +1,8 @@
 <template>
-	<q-page padding  class="q-mt-none q-pt-none">
+
+	<q-page padding  class="q-mt-none q-pt-none" :style="`background-image: linear-gradient(rgba(255,255,255,.8), rgba(255,255,255,.8)),url(https://apimovie.corprotec.com/getImagen/${rawHtml.imagen});
+    background-size: cover;
+    background-position: 50% 50%;`">
 		<q-breadcrumbs class="q-mt-xs q-mb-lg">
 			<q-breadcrumbs-el label="Peliculas" to="/admin/peliculas" />
 			<q-breadcrumbs-el class="active-breadcrumb" :label="$route.params.pelicula?'Nueva Pelicula':'Editar Pelicula'" />
@@ -152,14 +155,21 @@
 
 					<div v-html="rawHtml.rating" class="flex justify-center q-mt-sm"></div>
 				</div>
+				<div class="col-xs-12 col-sm-12 col-md-8" align="left">
+					<h6 class="q-my-none"><a style="text-decoration: none;" :href="`https://www.filmaffinity.com/es/film${filmVer.id}.html`" target="_blank" v-html="filmVer.titulo"></a></h6>
+					<q-separator />
 
-				<div class="col-xs-12 col-sm-12 col-md-8" v-html="rawHtml.movieInfo" align="left"></div>
+					<div v-html="rawHtml.movieInfo"></div>
+				</div>
+				
 
 				<div class="q-py-md col-xs-12 q-mt-xl" align="center">
 					<q-btn icon="save" label="Guardar" type="submit" color="primary"/>
 					<q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
 				</div>
-				
+				<q-inner-loading :showing="loadingInfo">
+					<q-spinner size="50px" color="primary"/>
+				</q-inner-loading>
 			</div>
 
 			<q-dialog v-model="dialogSearch"  class="scroll-none" @hide="()=>{
@@ -304,6 +314,7 @@
 				<q-btn fab icon="search" color="accent"  @click="dialogSearch = true"/>
 			</q-page-sticky>
 		</q-page>
+
 	</template>
 	<script>
 
@@ -313,7 +324,7 @@
 
 			data () {
 				return {
-
+					loadingInfo:false,
 					rawHtml:{},
 					loadingState:false,
 					dialogSearch:true,
@@ -352,14 +363,20 @@
 				getMovieRawHtml(filmSelec){
 					const this_ = this
 					this.filmVer = filmSelec
-					this.swfilm=true
+					this.swfilm = true
+					this.filmVer.titulo = this_.filmVer.titulo.replace(' - FilmAffinity', '')
+					this.dialogSearch = false
+					this.loadingInfo = true
 					// this.loading = true
 					this_.$axios.get(`${this_.$store.state.movie.baseUrl}view_movie/${this_.filmVer.id}`)
 					.then(r=>{
 						this_.rawHtml = r.data
 						this_.rawHtml.ratingn = Math.round(this_.rawHtml.ratingn*1)
+						this_.loadingInfo = false
 
-						this_.dialogSearch = false
+					
+						r.data.dataDb.titulo = this_.filmVer.titulo
+						
 						// console.log(r.data)
 
 						// this_.loading = false
@@ -499,18 +516,21 @@
 				vertical-align middle
 		
 		.show-akas {
-		    margin-left: 10px;
-		    font-size: 12px;
-		    color: #888;
-		    cursor: pointer;
-		    border: 1px solid #DDD;
-		    background: #F8F8F8;
-		    padding: 0 2px;
+				margin-left: 10px;
+				font-size: 12px;
+				color: #888;
+				cursor: pointer;
+				border: 1px solid #DDD;
+				background: #F8F8F8;
+				padding: 0 2px;
 		}
 		
 		.akas > ul {
-		    list-style-type: none;
-		    margin: 0;
-		    padding: 0;
+				list-style-type: none;
+				margin: 0;
+				padding: 0;
 		}
+		
+		a
+			color #222
 	</style>
