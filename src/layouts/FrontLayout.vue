@@ -28,7 +28,9 @@
 			content-class="bg-grey-3 overflow-hidden"
 			
 		>
-		<q-scroll-area  style="height:calc(100% - 110px);margin-top:110px;">
+		<!-- <q-scroll-area  style="height:calc(100% - 110px);margin-top:110px;"> -->
+
+		<q-scroll-area  style="height:calc(100% - 50px);margin-top:50px;">
 			<q-separator/>
 			<q-list dense>
 					
@@ -49,14 +51,15 @@
 												 <q-item tag="label" v-ripple  v-for="genero in $store.state.movie.generos" :key="genero.id">
 													<q-item-section avatar>
 														<q-icon :name="`img:statics/generos/svg/${genero.imagen}`"/>
-
 													</q-item-section>
 													 <q-item-section>
 														 <q-item-label>{{genero.nombre_es}}</q-item-label>
 													 </q-item-section>
 													 <q-item-section side >
 														 <!-- <q-toggle color="blue" v-model="estados" :val="genero.id" @input="changeToggle"/> -->
-														 <q-radio v-model="$store.state.movie.filtro.idGenero" :val="genero.id" color="teal" @input="filterGenero"/>
+														 <q-radio v-model="$store.state.movie.filtro.idGenero" :val="genero.id" color="teal" @input="(value)=>{
+																$store.commit('movie/actualizarFiltro', {idGenero:value})
+														 }"/>
 													 </q-item-section>
 												 </q-item>
 
@@ -95,12 +98,12 @@
 
 						<q-separator />
 
-						<q-expansion-item icon="perm_identity" default-opened label="Año" header-class="text-teal">
+						<q-expansion-item icon="calendar_today" default-opened label="Año" header-class="text-teal">
 							<q-card>
 								<q-card-section>
 									<div class="col full-height row items-center">
 										<div class="q-date__years-item flex flex-center q-mt-xs" v-for="index in 20" :key="index">
-											<q-btn :color="$store.state.movie.filtro.year==1999+index?'primary':'white'" size="sm" :text-color="$store.state.movie.filtro.year==1999+index?'white':'black'" :label="1999+index" @click="filterYear(index)"/>
+											<q-btn :color="$store.state.movie.filtro.year==1999+index?'primary':'white'" size="sm" :text-color="$store.state.movie.filtro.year==1999+index?'white':'black'" :label="1999+index" @click="$store.commit('movie/actualizarFiltro', {year:1999+index})"/>
 										</div>
 									</div>
 								</q-card-section>
@@ -109,12 +112,14 @@
 
 						<q-separator />
 
-						<q-expansion-item  icon="shopping_cart" default-opened label="Third" header-class="text-purple">
+						<q-expansion-item  icon="format_align_center" default-opened label="Inicial" header-class="text-purple">
 							<q-card>
 								<q-card-section>
-									Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti
-									commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste
-									eveniet doloribus ullam aliquid.
+									<div class="col full-height row items-center">
+										<div class="q-date__years-item flex flex-center q-mt-xs" v-for="index in 26" :key="index">
+											<q-btn :color="$store.state.movie.filtro.letra==String.fromCharCode(64+index)?'primary':'white'" size="sm" :text-color="$store.state.movie.filtro.letra==String.fromCharCode(64+index)?'white':'black'" :label="String.fromCharCode(64+index)" @click="$store.commit('movie/actualizarFiltro', {letra:String.fromCharCode(64+index)})"/>
+										</div>
+									</div>
 								</q-card-section>
 							</q-card>
 						</q-expansion-item>
@@ -138,7 +143,8 @@
 						</q-expansion-item>
 					</q-list>
 					</q-scroll-area>
-					<div class="absolute-top bg-white layout-drawer-toolbar"><form autocorrect="off" autocapitalize="off" autocomplete="off" spellcheck="false">
+					<div class="absolute-top bg-white layout-drawer-toolbar">
+						<form autocorrect="off" autocapitalize="off" autocomplete="off" spellcheck="false">
 
 						<q-input standout="bg-primary text-white" square  class="q-py-none q-my-none" v-model="search" placeholder="Buscar titulo..." style="height: 50px;">	
 							<template v-slot:append>
@@ -147,10 +153,13 @@
 						</q-input>
 			<q-separator/>
 
-						<div class="row justify-left q-py-sm q-pl-md bg-grey-3">
-							<strong>Filtro:</strong> <q-chip removable v-show="txtChip" @remove="resetFilter" color="primary" text-color="white" icon="movie_filter">    {{txtChip}}
+					<!-- 	<div class="row justify-left q-py-sm q-pl-md bg-grey-3">
+							<strong>Filtro:</strong> <q-chip removable v-show="txtChip" @remove="$store.commit('movie/actualizarFiltro', {})" color="primary" text-color="white" icon="movie_filter">    {{txtChip}}
 							</q-chip>
-						</div>
+						</div> -->
+
+
+
 		<!-- 				<q-item-label header ><strong>Filtro:</strong> <q-chip removable v-show="txtChip" @remove="resetFilter" color="primary" text-color="white" icon="movie_filter">
 				{{txtChip}}
 			</q-chip></q-item-label> -->
@@ -201,7 +210,7 @@ export default {
 		// })
 		
 	},
-	  computed:{
+		computed:{
 		txtChip(){
 			let valReturn =  null
 			let keys = Object.keys(this.$store.state.movie.filtro)
@@ -212,7 +221,12 @@ export default {
 						case 'idGenero':
 							valReturn =  this.$store.state.movie.generos[value].nombre_es
 						break;
+
 						case 'year':
+							valReturn = value
+						break;
+
+						case 'letra':
 							valReturn = value
 						break;
 					}
@@ -221,16 +235,16 @@ export default {
 			return valReturn	
 			
 		}
-	  },
+		},
 	
 	methods: {
 		openURL,
-		resetFilter(){
-			this.$store.commit('movie/actualizarFiltro', {})
-			// this.txtChip = null
-			// this.radioValue = null
-			// this.indexElegido = null
-		},
+		// resetFilter(){
+		// 	this.$store.commit('movie/actualizarFiltro', {})
+		// 	// this.txtChip = null
+		// 	// this.radioValue = null
+		// 	// this.indexElegido = null
+		// },
 	
 		// displayStatus(){
 		// 	console.log(this.estados)
@@ -238,24 +252,36 @@ export default {
 		// changeToggle(val){
 		// 	this.$store.commit('movie/actualizarGeneros', val)
 		// },
-		filterGenero(value){
-			this.$store.commit('movie/actualizarFiltro', {idGenero:value})
-			// this.indexElegido = null
-			// this.txtChip = this.$store.state.movie.generos[value].nombre_es
-			
-		},
-		filterYear(index){
-			// this.indexElegido = index
-			// this.radioValue = null
-			this.$store.commit('movie/actualizarFiltro', {year:2000+index-1})
-			// this.txtChip = 2000+index-1
 
-		}
+
+		// filterGenero(value){
+		// 	this.$store.commit('movie/actualizarFiltro', {idGenero:value})
+		// 	// this.indexElegido = null
+		// 	// this.txtChip = this.$store.state.movie.generos[value].nombre_es
+			
+		// },
+		// filterYear(index){
+		// 	// this.indexElegido = index
+		// 	// this.radioValue = null
+		// 	this.$store.commit('movie/actualizarFiltro', {year:2000+index-1})
+		// 	// this.txtChip = 2000+index-1
+
+		// },
+		// filterLetter(index){
+		// 	// this.indexElegido = index
+		// 	// this.radioValue = null
+		// 	this.$store.commit('movie/actualizarFiltro', {letra:String.fromCharCode(64+index)})
+		// 	// this.txtChip = 2000+index-1
+
+		// },
+
+		
 	}
 }
 </script>
 
 <style lang="stylus">
+
 .MyLayout
 	// .mydrawer
 	// 	overflow hidden!important
@@ -263,6 +289,7 @@ export default {
 	.q-field__control
 		height 50px!important
 
+	
 </style>
 
 

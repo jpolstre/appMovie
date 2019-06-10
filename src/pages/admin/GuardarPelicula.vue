@@ -1,6 +1,6 @@
 <template>
 
-	<q-page padding  class="q-mt-none q-pt-none" :style="`background-image: linear-gradient(rgba(255,255,255,.8), rgba(255,255,255,.8)),url(https://apimovie.corprotec.com/getImagen/${rawHtml.imagen});
+	<q-page padding  class="q-mt-none q-pt-none" :style="`background-image: linear-gradient(rgba(255,255,255,.6), rgba(255,255,255,.6)),url(https://apimovie.corprotec.com/getImagen/${rawHtml.imagen});
     background-size: cover;
     background-position: 50% 50%;`">
 		<q-breadcrumbs class="q-mt-xs q-mb-lg">
@@ -349,13 +349,12 @@
 			created(){
 				const this_ = this
 				document.saludo = function(txt){//ok
-						// alert(txt.trim());
-						this_.searchText = txt.trim()
-						this_.swfilm = true
-						// this_.rawHtml={}
-						this_.dialogSearch = true
-						this_.onSearch()
-
+					// alert(txt.trim());
+					this_.searchText = txt.trim()
+					this_.swfilm = true
+					// this_.rawHtml={}
+					this_.dialogSearch = true
+					this_.onSearch()
 				}  
 			},
 
@@ -393,6 +392,7 @@
 					})
 				},
 				onSearch(){
+					console.log(this.searchText)
 					if(!this.searchText){
 						this.$q.notify({
 							color: 'red-5',

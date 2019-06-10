@@ -35,6 +35,9 @@ export default {
 					case 'year':
 						valReturn = {txt:value, icon:'calendar_today'}
 					break;
+					case 'letra':
+						valReturn = {txt:value, icon:'format_align_center'}
+					break;
 				}
 			}
 		})

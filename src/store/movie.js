@@ -13,7 +13,7 @@ export default {
 	state: {
 		rememberLogin:{name:'', pass:'', tipo:''},
 		
-		filtro:{idGenero:null, year:null, titulo:null, idCalidad:null, director:null, reparto:null },
+		filtro:{idGenero:null, year:null, titulo:null, letra:null, idCalidad:null, director:null, reparto:null },
 
 		paginaMeta: {},
 		usuario:{
@@ -180,6 +180,7 @@ export default {
 	//mutaciones
 	mutations: {
 		actualizarFiltro(state, opt){
+			// console.log(state.filtro)
 			let keys = Object.keys(state.filtro)
 				keys.forEach(key=>{
 					if(opt[key]){
@@ -189,6 +190,8 @@ export default {
 				}
 			})
 		},
+
+		
 
 		actualizarGeneros(state, idsGenerosTrue){
 
