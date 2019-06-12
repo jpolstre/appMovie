@@ -1,8 +1,8 @@
 <template>
 
 	<q-page padding  class="q-mt-none q-pt-none" :style="`background-image: linear-gradient(rgba(255,255,255,.6), rgba(255,255,255,.6)),url(https://apimovie.corprotec.com/getImagen/${rawHtml.imagen});
-    background-size: cover;
-    background-position: 50% 50%;`">
+		background-size: cover;
+		background-position: 50% 50%;`">
 		<q-breadcrumbs class="q-mt-xs q-mb-lg">
 			<q-breadcrumbs-el label="Peliculas" to="/admin/peliculas" />
 			<q-breadcrumbs-el class="active-breadcrumb" :label="$route.params.pelicula?'Nueva Pelicula':'Editar Pelicula'" />
@@ -154,12 +154,126 @@
 				 </q-img> -->
 
 					<div v-html="rawHtml.rating" class="flex justify-center q-mt-sm"></div>
+
+					<div class="q-mt-sm" v-if="rawHtml.dataDb.Trailer_url">
+						<caption>Trailer</caption>
+						<iframe :src="rawHtml.dataDb.Trailer_url" frameborder="0" allowfullscreen=""></iframe>
+					</div>
+					<div class="q-mt-sm" >
+						<caption>Capturas</caption>
+						<!-- label="Capturas" -->
+						<q-uploader
+							dense
+							hide-upload-btn
+							url="http://localhost:4444/upload"
+							
+							multiple
+							accept=".jpg, image/*"
+						/>
+					</div>
+
 				</div>
 				<div class="col-xs-12 col-sm-12 col-md-8" align="left">
 					<h6 class="q-my-none"><a style="text-decoration: none;" :href="`https://www.filmaffinity.com/es/film${filmVer.id}.html`" target="_blank" v-html="filmVer.titulo"></a></h6>
 					<q-separator />
 
 					<div v-html="rawHtml.movieInfo"></div>
+					<div class="q-mt-sm">
+						<label for="qeditor">Detalles Tecnicos</label>
+						<q-editor
+									id="qeditor"
+									v-model="rawHtml.dataDb.Detalles_tecnicos"
+									:dense="$q.screen.lt.md"
+									:toolbar="[
+										[
+											{
+												label: $q.lang.editor.align,
+												icon: $q.iconSet.editor.align,
+												fixedLabel: true,
+												list: 'only-icons',
+												options: ['left', 'center', 'right', 'justify']
+											},
+											{
+												label: $q.lang.editor.align,
+												icon: $q.iconSet.editor.align,
+												fixedLabel: true,
+												options: ['left', 'center', 'right', 'justify']
+											}
+										],
+										['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
+										['token', 'hr', 'link', 'custom_btn'],
+										['print', 'fullscreen'],
+										[
+											{
+												label: $q.lang.editor.formatting,
+												icon: $q.iconSet.editor.formatting,
+												list: 'no-icons',
+												options: [
+													'p',
+													'h1',
+													'h2',
+													'h3',
+													'h4',
+													'h5',
+													'h6',
+													'code'
+												]
+											},
+											{
+												label: $q.lang.editor.fontSize,
+												icon: $q.iconSet.editor.fontSize,
+												fixedLabel: true,
+												fixedIcon: true,
+												list: 'no-icons',
+												options: [
+													'size-1',
+													'size-2',
+													'size-3',
+													'size-4',
+													'size-5',
+													'size-6',
+													'size-7'
+												]
+											},
+											{
+												label: $q.lang.editor.defaultFont,
+												icon: $q.iconSet.editor.font,
+												fixedIcon: true,
+												list: 'no-icons',
+												options: [
+													'default_font',
+													'arial',
+													'arial_black',
+													'comic_sans',
+													'courier_new',
+													'impact',
+													'lucida_grande',
+													'times_new_roman',
+													'verdana'
+												]
+											},
+											'removeFormat'
+										],
+										['quote', 'unordered', 'ordered', 'outdent', 'indent'],
+
+										['undo', 'redo']
+									]"
+									:fonts="{
+										arial: 'Arial',
+										arial_black: 'Arial Black',
+										comic_sans: 'Comic Sans MS',
+										courier_new: 'Courier New',
+										impact: 'Impact',
+										lucida_grande: 'Lucida Grande',
+										times_new_roman: 'Times New Roman',
+										verdana: 'Verdana'
+									}"
+								/>
+					</div>
+
+
+				</div>
+
 				</div>
 				
 
@@ -325,7 +439,11 @@
 			data () {
 				return {
 					loadingInfo:false,
-					rawHtml:{},
+					rawHtml:{
+					 dataDb:{
+						Detalles_tecnicos:''
+					 }
+					},
 					loadingState:false,
 					dialogSearch:true,
 					searchText:null,
@@ -333,16 +451,16 @@
 					swfilm:false,
 					filmElegido:{},
 					filmVer:{},
-					form:{
-						nombre: null,
-						anio: null,
-						estado:true,
-						sinopsis:null,
-						detallestecnicos:null,
-						idfilmafinitty:null,
-						idimdb:null,
-						traileruri:null
-					}
+					// form:{
+					// 	nombre: null,
+					// 	anio: null,
+					// 	estado:true,
+					// 	sinopsis:null,
+					// 	detallestecnicos:null,
+					// 	idfilmafinitty:null,
+					// 	idimdb:null,
+					// 	traileruri:null
+					// }
 
 				}
 			},
@@ -360,11 +478,13 @@
 
 			methods: {
 				getMovieRawHtml(filmSelec){
+					this.dialogSearch = false
+
 					const this_ = this
 					this.filmVer = filmSelec
 					this.swfilm = true
 					this.filmVer.titulo = this_.filmVer.titulo.replace(' - FilmAffinity', '')
-					this.dialogSearch = false
+				
 					this.loadingInfo = true
 					// this.loading = true
 					this_.$axios.get(`${this_.$store.state.movie.baseUrl}view_movie/${this_.filmVer.id}`)
@@ -374,7 +494,9 @@
 						this_.loadingInfo = false
 
 					
-						r.data.dataDb.titulo = this_.filmVer.titulo
+						this_.rawHtml.dataDb.titulo = this_.filmVer.titulo
+
+						this_.rawHtml.dataDb.Detalles_tecnicos = ''
 						
 						// console.log(r.data)
 
@@ -392,7 +514,7 @@
 					})
 				},
 				onSearch(){
-					console.log(this.searchText)
+					// console.log(this.searchText)
 					if(!this.searchText){
 						this.$q.notify({
 							color: 'red-5',

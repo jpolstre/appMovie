@@ -1,9 +1,9 @@
 {
-  "name": "movie",
+  "name": "MovieApp",
   "version": "0.0.1",
-  "description": "A Quasar Framework app",
-  "productName": "Quasar App",
-  "cordovaId": "org.cordova.quasar.app",
+  "description": "A Movie app",
+  "productName": "MovieApp",
+  "cordovaId": "org.cordova.MovieApp.app",
   "author": "PepeLui",
   "private": true,
   "scripts": {
