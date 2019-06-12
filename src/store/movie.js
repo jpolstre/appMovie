@@ -4,13 +4,22 @@
 
 const  url = 'https://apimovie.corprotec.com/'
 
+
 // const  url = 'http://localhost/apimovie/'
 
 export default {
 	namespaced: true,
 
+
+
+
  //estados
 	state: {
+
+		keyTmdb: '8bd1f0324e19b04b41ed5c8d182ca1ce',
+		baseTmdb: 'https://api.themoviedb.org/',
+		baseTmdbImages: 'https://image.tmdb.org/t/p/',
+
 		rememberLogin:{name:'', pass:'', tipo:''},
 		
 		filtro:{idGenero:null, year:null, titulo:null, letra:null, idCalidad:null, director:null, reparto:null },

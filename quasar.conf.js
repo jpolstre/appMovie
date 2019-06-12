@@ -66,7 +66,10 @@ module.exports = function (ctx) {
 				'QRating',
 				'QInnerLoading',
 				'QSpinner',
-				'QEditor'
+				'QEditor',
+				'QSelect',
+				'QInfiniteScroll',
+				'QSpinnerDots'
 	
 
 			],
