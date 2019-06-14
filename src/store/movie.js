@@ -17,7 +17,7 @@ export default {
 	state: {
 
 		keyTmdb: '8bd1f0324e19b04b41ed5c8d182ca1ce',
-		baseTmdb: 'https://api.themoviedb.org/',
+		baseTmdb: 'https://api.themoviedb.org/3/',
 		baseTmdbImages: 'https://image.tmdb.org/t/p/',
 
 		rememberLogin:{name:'', pass:'', tipo:''},

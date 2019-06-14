@@ -1,10 +1,12 @@
 <template>
-	<q-page padding>
-		<!--  style="height:calc(100vh - 170px);" class="scroll" -->
+	<q-page padding  class="q-mt-none q-pt-none" :style="`background-image: linear-gradient(rgba(255,255,255,.6), rgba(255,255,255,.6)),url(${$store.state.movie.baseTmdbImages}original/${form.backdrop_path});
+			background-size: cover;
+			background-position: 50% 50%;`">
+			<q-breadcrumbs class="q-mt-xs q-mb-lg">
+				<q-breadcrumbs-el label="Peliculas" to="/admin/peliculas" />
+				<q-breadcrumbs-el class="active-breadcrumb" :label="$route.params.pelicula?'Nueva Pelicula':'Editar Pelicula'" />
+			</q-breadcrumbs>
 
-
-
-		form para nuevo anterior
 			<q-form
 				@submit="onSubmit"
 				@reset="onReset"
@@ -13,7 +15,20 @@
 		
 			<div class="col-xs-12 col-sm-12 col-md-5" align="center">
 
-				<q-uploader
+				<q-img class="q-card" :src="`${$store.state.movie.baseTmdbImages}w342/${form.poster_path}`" style="width: 250px" v-if="form.poster_path">
+					<div class="absolute-bottom text-body1 text-center">
+						 <q-rating
+							v-show="form.vote_average"
+							v-model="form.vote_average"
+							size="1.2em"
+							color="orange"
+							:max="10"
+							readonly
+							/>
+					</div>
+				</q-img>
+
+				<!-- <q-uploader
 					dense
 					hide-upload-btn
 					url="http://localhost:4444/upload"
@@ -21,77 +36,22 @@
 					multiple
 					accept=".jpg, image/*"
 					style="max-width: 300px"
-
-				/>
-
-			
-			
+				/> -->
 			</div>
 
 			<div class="col-xs-12 col-sm-12 col-md-7" >
 				<div class="q-mt-md">
-
-
 					<q-input
 						dense
 						filled
-						v-for="el, index in form"
-						:key="index"
-						v-model="form.id"
-						:label="el *"
+						v-for="el, key in form"
+						:key="key"
+						v-model="form[key]"
+						:label="`${key} *`"
 						lazy-rules
-						:rules="[ val => val && val.length > 0 || 'El id es obligatorio']"
-					/>
+						v-if="key !== 'estado'"
 
-					<q-input
-					dense
-					filled
-					v-model="form.title"
-					label="Titulo *"
-					lazy-rules
-					:rules="[ val => val && val.length > 0 || 'El titulo es obligatorio']"
-					/>
-
-					<q-input
-					dense
-					filled
-					v-model="form.original_title"
-					label="Titulo Original *"
-					lazy-rules
-					:rules="[ val => val && val.length > 0 || 'El titulo original es obligatorio']"
-					/>
-
-					<q-input
-					dense
-					filled
-					type="number"
-					v-model="form.anio"
-					label="Año *"
-					lazy-rules
-					:rules="[
-					val => val !== null && val !== '' || 'El Año es obligatorio',
-					val => val > 1999 && val < 2020 || 'Rango: 2000-2019'
-					]"
-					/>
-
-					<q-input
-					dense
-					filled
-					type="textarea"
-					v-model="form.sinopsis"
-					label="Sinopsis *"
-					lazy-rules
-					:rules="[ val => val && val.length > 0 || 'La sinopsis es obligatoria']"
-					/>
-
-					<q-input
-					dense
-					filled
-					type="textarea"
-					v-model="form.detallestecnicos"
-					label="Detalles Tecnicos Del Ripeado*"
-					lazy-rules
-					:rules="[ val => val && val.length > 0 || 'Los detalles tecnicos son obligatorios']"
+						:rules="[ val => val && val.length > 0 || `${key} es obligatorio`]"
 					/>
 
 					<q-toggle v-model="form.estado" label="Habilitada" />
@@ -108,11 +68,14 @@
 		<q-dialog v-model="dialogSearch"  class="scroll-none" @hide="()=>{
 			loadingState=false
 			// searchText = null
-			// resultados = null
+			resultados = []
 			// swfilm = false
 		}" @show="()=>{
 
 			$refs.inputSearch.focus()
+			if(searchText!== ''){
+				onSearch()
+			}
 		}">
 		<q-card style="width: 800px; max-width: 90vw;">
 			<q-card-section>
@@ -155,7 +118,16 @@
 								</q-item-section>
 								<q-item-section>
 									<q-item-label>
-										<span class="cursor-pointer text-indigo" style="text-decoration: underline;" v-html="`${resultado.title} (${resultado.release_date.slice(0,4)})`"></span>
+										<span class="cursor-pointer text-indigo" style="text-decoration: underline;" v-html="`${resultado.title} (${resultado.release_date.slice(0,4)})`" @click="()=>{
+											//para que salga ordenadito y solo los campos de form.
+											let temp = {}
+											for(var key in form) {
+												temp[key] = resultado[key]
+											}
+											form = temp
+
+											dialogSearch = false
+										}"></span>
 									
 									</q-item-label>
 									<q-item-label  v-html="resultado.overview" caption>
@@ -205,23 +177,48 @@
 				resultados:[], 
 				totalPages:0,
 				totalResults:0,
+
+				generos:[],
+
 				form:{//solo los datos que se muestran en la lista de peliculas.
 					id: null,
-					vote_count: null,
-					vote_average: null,
 					title: null,
+					original_title: null,
+					release_date: null,
+					original_language: null,
+					genre_ids:null,//  [14,36,etc].
+					overview: null,
+					vote_average: null,
+					vote_count: null,
 					popularity: null,
 					poster_path: null,
-					original_language: null,
-					original_title: null,
 					backdrop_path: null,
-					overview: null,
-					release_date: null
+					estado:true,
 				}
 			}
 		},
+		created(){
+			const self =  this
+			this.$axios.get(`${self.$store.state.movie.baseTmdb}genre/movie/list?api_key=${self.$store.state.movie.keyTmdb}&language=es-ES`)
+			.then(r=>{
+				self.generos = r.data.genres.map(g=>{
+					let gObj = {}
+					gObj[g.id] = g
+					return gObj
+				})
+			})
+			.catch(r => {
+				self.$q.notify({
+				message: 'Error En El Servidor.',
+				position: 'bottom',
+				icon:'warning',
+				color:'negative'
+				})
+			})
+		},
 		
 	computed:{
+
 		sortResults(){
 			return this.resultados.sort(function(a, b){
 					var keyA = new Date(a.release_date),
@@ -235,22 +232,61 @@
 	},
 	methods: {
 
+		onReset () {
+			this.form = {
+				id: null,
+				title: null,
+				original_title: null,
+				release_date: null,
+				original_language: null,
+				genre_ids:null,//  [14,36,etc].
+				overview: null,
+				vote_average: null,
+				vote_count: null,
+				popularity: null,
+				poster_path: null,
+				backdrop_path: null,
+				estado:true,
+			}
+		},
+
+		onSubmit () {
+			if (this.accept !== true) {
+				this.$q.notify({
+					color: 'red-5',
+					textColor: 'white',
+					icon: 'warning',
+					message: 'You need to accept the license and terms first'
+				})
+			}
+			else {
+				this.$q.notify({
+					color: 'green-4',
+					textColor: 'white',
+					icon: 'fas fa-check-circle',
+					message: 'Submitted'
+				})
+			}
+		},
+
 			onLoad(index, done){
 
 				console.log(index+1)
 				console.log(this.totalPages)
 
-				const this_ = this
+				const self = this
 				if(index+1 <= this.totalPages){
-					this.$axios.get(`${this_.$store.state.movie.baseTmdb}3/search/movie?api_key=${this_.$store.state.movie.keyTmdb}&language=es-ES&query=${this_.searchText}&page=${index+1}&include_adult=false`)
+					this.$axios.get(`${self.$store.state.movie.baseTmdb}search/movie?api_key=${self.$store.state.movie.keyTmdb}&language=es-ES&query=${self.searchText}&page=${index+1}&include_adult=false`)
 					.then(r=>{
 						for(let i=0;i<r.data.results.length;i++){
-							this_.resultados.push(r.data.results[i])
+							self.resultados[i].vote_average =  Math.round(self.resultados[i].vote_average*1)
+							self.resultados[i].estado = true
+							self.resultados.push(r.data.results[i])
 						}
 						done()
 					})
 					.catch(r => {
-						this_.$q.notify({
+						self.$q.notify({
 						message: 'Error En El Servidor.',
 						position: 'bottom',
 						icon:'warning',
@@ -288,18 +324,22 @@
 				}else{
 					this.resultados = []
 					this.loadingState = true
-					const this_ = this
+					const self = this
 
-					this.$axios.get(`${this_.$store.state.movie.baseTmdb}3/search/movie?api_key=${this_.$store.state.movie.keyTmdb}&language=es-ES&query=${this_.searchText}&page=1&include_adult=false`)
+					this.$axios.get(`${self.$store.state.movie.baseTmdb}search/movie?api_key=${self.$store.state.movie.keyTmdb}&language=es-ES&query=${self.searchText}&page=1&include_adult=false`)
 					.then(r=>{
-						this_.resultados = r.data.results
-						this_.totalResults = r.data.total_results
-						this_.totalPages = r.data.total_pages
-						this_.loadingState = false
+						self.resultados = r.data.results
+						for (let i=0;i<r.data.results.length;i++) {
+							self.resultados[i].vote_average =  Math.round(self.resultados[i].vote_average*1)
+							self.resultados[i].estado = true
+						}
+						self.totalResults = r.data.total_results
+						self.totalPages = r.data.total_pages
+						self.loadingState = false
 					})
 					.catch(r => {
 						this.resultados = []
-						this_.$q.notify({
+						self.$q.notify({
 						message: 'Error En El Servidor.',
 						position: 'bottom',
 						icon:'warning',
