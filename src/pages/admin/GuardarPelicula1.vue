@@ -1,19 +1,16 @@
 <template>
-
-	<q-page padding  class="q-mt-none q-pt-none" :style="form.backdrop_path? `background-image: linear-gradient(rgba(255,255,255,.3), rgba(255,255,255,.3)),url(${$store.state.movie.baseTmdbImages}original/${form.backdrop_path});
-				background-size: cover;
-				background-position: 50% 50%;`:'background-color:white;'">
-
-			<q-breadcrumbs class="q-pa-xs" >
-				<q-breadcrumbs-el  label="Peliculas" to="/admin/peliculas" />
+	<q-page padding  class="q-mt-none q-pt-none" :style="`background-image: linear-gradient(rgba(255,255,255,.0), rgba(255,255,255,.0)),url(${$store.state.movie.baseTmdbImages}original/${form.backdrop_path});
+			background-size: cover;
+			background-position: 50% 50%;`">
+			<q-breadcrumbs class="q-mt-xs q-mb-lg">
+				<q-breadcrumbs-el label="Peliculas" to="/admin/peliculas" />
 				<q-breadcrumbs-el class="active-breadcrumb" :label="$route.params.pelicula?'Nueva Pelicula':'Editar Pelicula'" />
 			</q-breadcrumbs>
-			<q-separator color="black"/>	
-			
+
 			<q-form
 				@submit="onSubmit"
 				@reset="onReset"
-				class="q-mt-sm row"
+				class="row"
 			>
 		
 			<div class="col-xs-12 col-sm-12 col-md-5" align="center">
@@ -22,7 +19,7 @@
 					<div class="absolute-bottom text-body1 text-center">
 						 <q-rating
 							v-show="form.vote_average"
-							v-model="form.vote_average*1"
+							v-model="form.vote_average"
 							size="1.2em"
 							color="orange"
 							:max="10"
@@ -42,10 +39,11 @@
 				/> -->
 			</div>
 
-			<div class="col-xs-12 col-sm-12 col-md-7 text-white q-pa-md q-card" style="background-color: rgba(0, 0, 0, 0.5);">
+			<div class="col-xs-12 col-sm-12 col-md-7 text-white q-pa-md" style="background-color: rgba(0, 0, 0, 0.5);">
 				<div class="q-mt-md">
 					<q-input
 						dark 
+
 						bg-color="transparent"
 						dense
 						filled
@@ -54,115 +52,17 @@
 						v-model="form[key]"
 						:label="`${key} *`"
 						lazy-rules
-						v-if="key !== 'estado' && key !== 'detalles_tecnicos'"
-						:type="key!=='overview'?'text':'textarea'"
-						:rules="[ val => val && val.length > 0 || `${key} es campo requerido`]"
+						v-if="key !== 'estado'"
+
+						:rules="[ val => val && val.length > 0 || `${key} es obligatorio`]"
 					/>
-			
 
-					<q-toggle v-model="form.estado" label="Habilitada" color="primary" class="q-mb-md"/>
-					<br>
-					<label for="qeditor">Detalles Tecnicos</label>
-					<q-editor
-								id="qeditor"
-								flat
-								     content-class="bg-black"
-								     toolbar-text-color="white"
-								     toolbar-toggle-color="yellow-8"
-								     toolbar-flat
-								     toolbar-bg="primary"
-								v-model="form.detalles_tecnicos"
-								:dense="$q.screen.lt.md"
-								:toolbar="[
-									[
-										{
-											label: $q.lang.editor.align,
-											icon: $q.iconSet.editor.align,
-											fixedLabel: true,
-											list: 'only-icons',
-											options: ['left', 'center', 'right', 'justify']
-										},
-										{
-											label: $q.lang.editor.align,
-											icon: $q.iconSet.editor.align,
-											fixedLabel: true,
-											options: ['left', 'center', 'right', 'justify']
-										}
-									],
-									['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
-									['token', 'hr', 'link', 'custom_btn'],
-									['print', 'fullscreen'],
-									[
-										{
-											label: $q.lang.editor.formatting,
-											icon: $q.iconSet.editor.formatting,
-											list: 'no-icons',
-											options: [
-												'p',
-												'h1',
-												'h2',
-												'h3',
-												'h4',
-												'h5',
-												'h6',
-												'code'
-											]
-										},
-										{
-											label: $q.lang.editor.fontSize,
-											icon: $q.iconSet.editor.fontSize,
-											fixedLabel: true,
-											fixedIcon: true,
-											list: 'no-icons',
-											options: [
-												'size-1',
-												'size-2',
-												'size-3',
-												'size-4',
-												'size-5',
-												'size-6',
-												'size-7'
-											]
-										},
-										{
-											label: $q.lang.editor.defaultFont,
-											icon: $q.iconSet.editor.font,
-											fixedIcon: true,
-											list: 'no-icons',
-											options: [
-												'default_font',
-												'arial',
-												'arial_black',
-												'comic_sans',
-												'courier_new',
-												'impact',
-												'lucida_grande',
-												'times_new_roman',
-												'verdana'
-											]
-										},
-										'removeFormat'
-									],
-									['quote', 'unordered', 'ordered', 'outdent', 'indent'],
-
-									['undo', 'redo']
-								]"
-								:fonts="{
-									arial: 'Arial',
-									arial_black: 'Arial Black',
-									comic_sans: 'Comic Sans MS',
-									courier_new: 'Courier New',
-									impact: 'Impact',
-									lucida_grande: 'Lucida Grande',
-									times_new_roman: 'Times New Roman',
-									verdana: 'Verdana'
-								}"
-							/>
+					<q-toggle v-model="form.estado" label="Habilitada"  dark/>
 
 			
 					<div class="q-mt-xl">
 						<q-btn label="Guardar" type="submit" color="primary"/>
-						<q-btn label="Reset" type="reset" color="white" flat class="q-ml-sm" />
+						<q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
 					</div>
 				</div>
 			</div>
@@ -189,7 +89,7 @@
 				<q-card-section style="height:calc(100vh - 170px);" class="scroll">
 					<q-form
 						@submit="onSearch"
-						class="q-gutter-md q-mb-xs"
+						class="q-gutter-md"
 						>
 						<q-input
 							dense
@@ -213,50 +113,27 @@
 							<q-list bordered separator>
 							<q-item-label header>{{totalResults}} resultados (elije uno):</q-item-label>
 							<q-item v-for="resultado, index in sortResults" :key="index">
-						<!-- 		<q-item-section left avatar class="q-ma-none q-pa-none">
-										<div align="center" style="font-size:16px;">{{index}}</div>
-								</q-item-section>
 								<q-item-section top avatar>
 									<q-avatar class="q-ma-none q-pa-none" size="92px" square>
+										{{index}}
 										<img  :src="`${$store.state.movie.baseTmdbImages}w342/${resultado.poster_path}`" v-if="resultado.poster_path">
 									</q-avatar>
-								</q-item-section> -->
-
-								<q-item-section top avatar>
-									<q-img
-									        :src="`${$store.state.movie.baseTmdbImages}w342/${resultado.poster_path}`"
-									        style="height: 100px; width: 70px;"
-									        :ratio="1"
-									        basic
-									        spinner-color="black"
-									      >
-									        <div class="absolute-bottom text-center text-body">
-									          {{index+1}}
-									        </div>
-									      </q-img>
-
 								</q-item-section>
 								<q-item-section>
 									<q-item-label>
 										<span class="cursor-pointer text-indigo" style="text-decoration: underline;" v-html="`${resultado.title} (${resultado.release_date.slice(0,4)})`" @click="()=>{
 											//para que salga ordenadito y solo los campos de form.
-											// let temp = {}
+											let temp = {}
 											for(var key in form) {
-												if(resultado[key]){
-													form[key] = resultado[key]+''	
-												}
-
-												
+												temp[key] = resultado[key]
 											}
-											form.estado = true
-											form.detalles_tecnicos = ''
-											// form = temp
+											form = temp
 
 											dialogSearch = false
 										}"></span>
 									
 									</q-item-label>
-									<q-item-label  v-html="resultado.overview.length>100?resultado.overview.slice(0,99)+'...':resultado.overview" caption>
+									<q-item-label  v-html="resultado.overview" caption>
 									</q-item-label>
 								</q-item-section>
 								<q-item-section top side>
@@ -320,8 +197,6 @@
 					poster_path: null,
 					backdrop_path: null,
 					estado:true,
-					url:null,
-					detalles_tecnicos:''
 				}
 			}
 		},
@@ -375,8 +250,6 @@
 				poster_path: null,
 				backdrop_path: null,
 				estado:true,
-				url:null,
-				detalles_tecnicos:''
 			}
 		},
 
