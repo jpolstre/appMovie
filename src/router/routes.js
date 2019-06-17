@@ -25,10 +25,24 @@ const routes = [
 		]
 	},
 	{
+		path: '/admin/series',
+		component: () => import('layouts/AdminLayout.vue'),
+		children: [
+			{ path: '', name:'Series', component: () => import('pages/admin/Series.vue') }
+		]
+	},
+	{
 		path: '/admin/peliculas/guardar',
 		component: () => import('layouts/AdminLayout.vue'),
 		children: [
 			{ path: '', name:'GuardarPelicula', component: () => import('pages/admin/GuardarPelicula.vue') }
+		]
+	},
+	{
+		path: '/admin/series/guardar',
+		component: () => import('layouts/AdminLayout.vue'),
+		children: [
+			{ path: '', name:'GuardarSerie', component: () => import('pages/admin/GuardarSerie.vue') }
 		]
 	},
 

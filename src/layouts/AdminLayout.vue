@@ -98,6 +98,11 @@ const menuList = [
 		separator: true
 	},
 	{
+		icon: 'tv',
+		label: 'series',
+		separator: true
+	},
+	{
 		icon: 'movie_filter',
 		label: 'generos',
 		separator: true

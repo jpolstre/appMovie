@@ -16,7 +16,7 @@
 				class="q-mt-sm row"
 			>
 		
-			<div class="col-xs-12 col-sm-12 col-md-5" align="center">
+			<div class="col-xs-12 col-sm-12 col-md-3" align="center">
 
 				<q-img class="q-card" :src="`${$store.state.movie.baseTmdbImages}w342/${form.poster_path}`" style="width: 250px" v-if="form.poster_path">
 					<div class="absolute-bottom text-body1 text-center">
@@ -42,7 +42,7 @@
 				/> -->
 			</div>
 
-			<div class="col-xs-12 col-sm-12 col-md-7 text-white q-pa-md q-card" style="background-color: rgba(0, 0, 0, 0.5);">
+			<div class="col-xs-12 col-sm-12 col-md-9 text-white q-pa-md q-card" style="background-color: rgba(0, 0, 0, 0.5);">
 				<div class="q-mt-md">
 					<q-input
 						dark 
@@ -241,6 +241,7 @@
 										<span class="cursor-pointer text-indigo" style="text-decoration: underline;" v-html="`${resultado.title} (${resultado.release_date.slice(0,4)})`" @click="()=>{
 											//para que salga ordenadito y solo los campos de form.
 											// let temp = {}
+											onReset()
 											for(var key in form) {
 												if(resultado[key]){
 													form[key] = resultado[key]+''	
@@ -401,8 +402,8 @@
 
 			onLoad(index, done){
 
-				console.log(index+1)
-				console.log(this.totalPages)
+				// console.log(index+1)
+				// console.log(this.totalPages)
 
 				const self = this
 				if(index+1 <= this.totalPages){
@@ -455,6 +456,7 @@
 					this.resultados = []
 					this.loadingState = true
 					const self = this
+
 
 					this.$axios.get(`${self.$store.state.movie.baseTmdb}search/movie?api_key=${self.$store.state.movie.keyTmdb}&language=es-ES&query=${self.searchText}&page=1&include_adult=false`)
 					.then(r=>{
