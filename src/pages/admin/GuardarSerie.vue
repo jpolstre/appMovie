@@ -370,7 +370,7 @@ export default{
 			// }
 			// else {
 				const self = this
-				this.loadingState = true
+				this.$q.loading.show()
 				let sendFormData = new FormData()
 				for(let key in this.form){
 					sendFormData.append(key, this.form[key])
@@ -381,10 +381,11 @@ export default{
 					data:sendFormData,
 					config: { headers: {'Content-Type': 'multipart/form-data' }}
 				}).then(r =>{
-					self.loadingState = false
+					self.$q.loading.hide()
 					if(r.data.status === 'ok'){
 						self.onReset()
 						this.$q.notify({
+							position: 'top',
 							color: 'green-4',
 							textColor:'white',
 							icon: 'thumb_up',
@@ -392,6 +393,7 @@ export default{
 						})
 					}else{
 						this.$q.notify({
+							position: 'top',
 							color:'red-5',
 							textColor:'white',
 							icon:'warning',

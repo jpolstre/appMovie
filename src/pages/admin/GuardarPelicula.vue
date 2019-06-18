@@ -11,7 +11,7 @@
 			<q-separator color="black"/>	
 			
 			<q-form
-				@submit="onSubmit"
+				@submit="onSave"
 				@reset="onReset"
 				class="q-mt-sm row"
 			>
@@ -360,6 +360,58 @@
 		}
 	},
 	methods: {
+		onSave(){
+			// if (this.accept !== true){
+			// 	this.$q.notify({
+			// 		message: 'Revisa todos los campos.',
+			// 		position: 'top',
+			// 		icon:'warning',
+			// 		color:'red-5'
+			// 	})
+			// }
+			// else {
+				const self = this
+				this.$q.loading.show()
+				let sendFormData = new FormData()
+				for(let key in this.form){
+					sendFormData.append(key, this.form[key])
+				}
+				self.$axios({
+					method: 'post',
+					url:`${self.$store.state.movie.baseUrl}savemv/pelicula`,
+					data:sendFormData,
+					config: { headers: {'Content-Type': 'multipart/form-data' }}
+				}).then(r =>{
+					self.$q.loading.hide()
+					if(r.data.status === 'ok'){
+						self.onReset()
+						this.$q.notify({
+							position: 'top',
+							color: 'green-4',
+							textColor:'white',
+							icon: 'thumb_up',
+							message: r.data.msg
+						})
+					}else{
+						this.$q.notify({
+							position: 'top',
+							color:'red-5',
+							textColor:'white',
+							icon:'warning',
+							message: r.data.msg
+						})
+					}
+				}).catch(r =>{
+					self.loadingState = false
+					this.$q.notify({
+						message: 'Error En El Servidor.',
+						position: 'top',
+						icon:'warning',
+						color:'red-5'
+					})
+				})
+			// }
+		},
 
 		onReset () {
 			this.form = {
@@ -381,24 +433,7 @@
 			}
 		},
 
-		onSubmit () {
-			if (this.accept !== true) {
-				this.$q.notify({
-					color: 'red-5',
-					textColor: 'white',
-					icon: 'warning',
-					message: 'You need to accept the license and terms first'
-				})
-			}
-			else {
-				this.$q.notify({
-					color: 'green-4',
-					textColor: 'white',
-					icon: 'fas fa-check-circle',
-					message: 'Submitted'
-				})
-			}
-		},
+
 
 			onLoad(index, done){
 
