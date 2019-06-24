@@ -6,7 +6,7 @@
 
 			<q-breadcrumbs class="q-pa-xs" >
 				<q-breadcrumbs-el  label="Series" to="/admin/series" />
-				<q-breadcrumbs-el class="active-breadcrumb" :label="$route.params.serie?'Nueva Serie':'Editar Serie'" />
+				<q-breadcrumbs-el class="active-breadcrumb" :label="$route.params.serie?'Editar Serie':'Nueva Serie'" />
 			</q-breadcrumbs>
 			<q-separator color="black"/>	
 			
@@ -248,7 +248,7 @@
 												}
 											}
 
-											form.estado = true
+											form.estado = 1
 											form.detalles_tecnicos = ''
 											// form = temp
 
@@ -297,7 +297,7 @@
 export default{
 	data(){
 		return{
-			dialogSearch:true,
+			dialogSearch:false,
 			searchText:null,
 			loadingState:false,
 			resultados:[], 
@@ -321,13 +321,14 @@ export default{
 				popularity: null,
 				poster_path: null,
 				backdrop_path: null,
-				estado:true,
+				estado:1,
 				url:null,
 				detalles_tecnicos:''
 			}
 		}
 	},
 	created(){
+
 		const self =  this
 		this.$axios.get(`${self.$store.state.movie.baseTmdb}genre/tv/list?api_key=${self.$store.state.movie.keyTmdb}&language=es-ES`)
 		.then(r=>{
@@ -345,6 +346,19 @@ export default{
 			color:'negative'
 			})
 		})
+
+		console.log(this.$route.params.serie)
+		if(this.$route.params.serie){
+			this.dialogSearch=false
+			for(let key in this.form){
+				this.form[key] = this.$route.params.serie[key]
+			}
+			this.form.estado = this.form.estado*1
+		}else{
+			this.dialogSearch=true
+
+		}
+		
 	},
 	computed:{
 		sortResults(){
@@ -428,7 +442,7 @@ export default{
 				popularity: null,
 				poster_path: null,
 				backdrop_path: null,
-				estado:true,
+				estado:1,
 				url:null,
 				detalles_tecnicos:''
 			}
@@ -442,7 +456,7 @@ export default{
 				.then(r=>{
 					for(let i=0;i<r.data.results.length;i++){
 						self.resultados[i].vote_average =  Math.round(self.resultados[i].vote_average*1)
-						self.resultados[i].estado = true
+						self.resultados[i].estado = 1
 						self.resultados.push(r.data.results[i])
 					}
 					done()
@@ -487,7 +501,7 @@ export default{
 					self.resultados = r.data.results
 					for (let i=0;i<r.data.results.length;i++) {
 						self.resultados[i].vote_average =  Math.round(self.resultados[i].vote_average*1)
-						self.resultados[i].estado = true
+						self.resultados[i].estado = 1
 					}
 					self.totalResults = r.data.total_results
 					self.totalPages = r.data.total_pages

@@ -53,6 +53,8 @@ module.exports = function (ctx) {
 				'QBtnDropdown',
 				'QAvatar',
 				'QTable',
+				'QTr',
+				'QTd',
 				'QBreadcrumbs',
 			  'QBreadcrumbsEl',
 			  'QImg',
