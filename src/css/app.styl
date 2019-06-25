@@ -2,6 +2,19 @@
 
 // para las animaciones amimate-pop
 @import 'core/motion'
+@import 'quasar.variables'
+
+// ::-webkit-scrollbar 
+// 	background-color #eee
+// 	width 10px!important
+// 	height 10px!important
+
+// ::-webkit-scrollbar-thumb 
+// 	background-color $primary
+// 	-webkit-border-radius 10px
+// 	border-radius 1px
+// 	border: 0.5px solid $primary;
+
 body
 	// overflow hidden
 	
@@ -17,3 +30,35 @@ body
 	// <q-card-section style="height: 75vh" class="scroll">
 	.q-dialog__inner > div
 		overflow hidden!important	
+		
+// tabla
+.my-sticky-header-column-table
+	
+	// max-width 600px
+
+	.q-table__middle
+		max-height 69vh
+
+	.q-table__top,
+	.q-table__bottom,
+	tr:first-child th, 
+	td:first-child 
+		background-color #fff!important
+
+	tr:first-child th
+		position sticky
+		top 0
+		opacity 1 
+		z-index 2 
+
+	tr:first-child th:first-child
+		z-index 3 
+
+	td:first-child
+		z-index 1
+
+	td:first-child, th:first-child
+		position sticky
+		left 0
+.text-teal
+	color #fff!important

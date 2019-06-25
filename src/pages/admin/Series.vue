@@ -1,5 +1,5 @@
 <template>
-	 <q-page padding  class="q-mt-none q-pt-none bg-primary">
+	 <q-page padding  class="q-mt-none q-pt-none ">
 
 		<!-- <h6 class="q-my-xs q-pt-none">Peliculas</h6> -->
 		<!-- <q-btn color="primary" icon="thumb_up" label="test" class="animate-pop"/> -->
@@ -11,12 +11,17 @@
 					<q-breadcrumbs-el label="Build" icon="build" /> -->
 				</q-breadcrumbs>
 
-		<q-table
 
-			color="primary"
+				<!-- 
+					color="primary"
       card-class="bg-primary text-white"
       table-class="text-white"
       table-header-class="text-white"
+				 -->
+
+		<q-table
+
+			
       flat
 
 			title="Treats"
@@ -337,38 +342,5 @@ export default {
 }
 </script>
 <style lang="stylus">
-// .my-sticky-header-column-table
-	/*
-		specifying max-width so the example can
-		highlight the sticky column on any browser window
-	*/
-	// max-width 600px
 
-	 // max height is important 
-// 	.q-table__middle
-// 		max-height 65vh
-
-// 	.q-table__top,
-// 	.q-table__bottom,
-// 	tr:first-child th, 
-// 	td:first-child 
-// 		background-color #fff
-
-// 	tr:first-child th
-// 		position sticky
-// 		top 0
-// 		opacity 1 
-// 		z-index 2 
-
-// 	tr:first-child th:first-child
-// 		z-index 3 
-
-// 	td:first-child
-// 		z-index 1
-
-// 	td:first-child, th:first-child
-// 		position sticky
-// 		left 0
-// .text-teal
-// 	color #009688!important
 </style>
