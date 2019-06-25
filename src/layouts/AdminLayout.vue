@@ -1,7 +1,7 @@
 <template>
 	<div class="q-pa-none q-ma-none">
 		<q-layout view="hHh Lpr lff"  >
-			<q-header elevated class="bg-black">
+			<q-header elevated class="bg-primary">
 				<q-toolbar>
 					<q-btn flat round dense icon="menu" @click="drawer = !drawer" class="q-mr-sm" />
 					<q-separator dark vertical inset />

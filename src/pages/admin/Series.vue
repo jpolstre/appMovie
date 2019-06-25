@@ -1,5 +1,5 @@
 <template>
-	 <q-page padding  class="q-mt-none q-pt-none">
+	 <q-page padding  class="q-mt-none q-pt-none bg-primary">
 
 		<!-- <h6 class="q-my-xs q-pt-none">Peliculas</h6> -->
 		<!-- <q-btn color="primary" icon="thumb_up" label="test" class="animate-pop"/> -->
@@ -12,11 +12,20 @@
 				</q-breadcrumbs>
 
 		<q-table
+
+			color="primary"
+      card-class="bg-primary text-white"
+      table-class="text-white"
+      table-header-class="text-white"
+      flat
+
 			title="Treats"
 			:data="data"
 			:columns="columns"
 			row-key="id"
-			 class="my-sticky-header-column-table"
+			dense
+			
+			class="my-sticky-header-column-table"
 
 			:selected-rows-label="getSelectedString"
 			 selection="multiple"
@@ -38,12 +47,17 @@
 				</q-input>
 			</template> -->
 
-			<template v-slot:top>
-				<q-btn class=" animate-pop" round	 dense color="primary" :disable="loading" icon="add" @click="$router.push({ name:'GuardarSerie' })" />
+			<template v-slot:top >
+				<div>
+					<q-btn class=" animate-pop"  size="sm" color="primary" :disable="loading" icon="add" @click="$router.push({ name:'GuardarSerie' })">
+						
+					</q-btn>
+				</div>
+				
 				<!-- @click="removeRow" -->
 				<div v-if="selected.length">
-					<q-btn class="on-right animate-pop" round	 dense color="primary" :disable="loading" icon="edit" @click="$router.push({ name: 'GuardarSerie', params: { serie:selected[0]}})"/>
-					<q-btn class="on-right animate-pop" round dense color="primary" :disable="loading" icon="delete_forever" />
+					<q-btn class="on-right animate-pop" size="sm" color="primary" :disable="loading" icon="edit" @click="$router.push({ name: 'GuardarSerie', params: { serie:selected[0]}})"></q-btn>
+					<q-btn class="on-right animate-pop" size="sm" color="red-5" :disable="loading" icon="delete_forever" @click="deleteSerie(selected[0])"></q-btn>
 				</div>
 				<q-space/>
 				<q-input borderless dense debounce="300" color="primary" v-model.trim="filter">
@@ -70,7 +84,7 @@
 						<q-img
 						class="q-card"
 							:src="`${$store.state.movie.baseTmdbImages}w342/${props.row.poster_path}`"
-							style=" height:  100%;with:  100%; "
+							style=" height:  100%; width:  50%; "
 							
 							basic
 							spinner-color="black"
@@ -82,6 +96,10 @@
 					</td>
 				</template>
 		</q-table>
+
+		<q-page-scroller position="bottom-left" :scroll-offset="150" :offset="[18, 18]">
+			<q-btn round glossy icon="keyboard_arrow_up" color="primary" />
+		</q-page-scroller>
 	</q-page>
 </template>
 
@@ -96,7 +114,7 @@ export default {
 				sortBy: 'name',
 				descending: false,
 				page: 1,
-				rowsPerPage:3,
+				rowsPerPage:0,
 				rowsNumber: 10
 			},
 			columns: [
@@ -142,8 +160,46 @@ export default {
 		})
 	},
 	methods: {
+
+
+		deleteSerie(item){
+
+			this.$q.dialog({
+				dark: true,
+				title: 'Confirmar Eliminar Serie',
+				message: `Seguro eliminar ${item.name} ?`,
+				cancel: true,
+				persistent: true
+			}).onOk(() => {
+				const self =  this
+				self.$axios.get(`${self.$store.state.movie.baseUrl}deletemv/serie/${item.id}`)
+				.then(r=>{
+					self.$q.notify({
+						message: r.data.msg,
+						position: 'bottom',
+						icon:'thumb_up',
+						color:'green-5'
+					})
+					self.onRequest({
+						pagination: self.pagination,
+						filter: ''
+					})	
+				})
+				.catch(r => {
+					self.$q.notify({
+					message: 'Error En El Servidor.',
+					position: 'bottom',
+					icon:'warning',
+					color:'negative'
+					})
+				})
+			})
+
+			
+			
+		},
 		getSelectedString () {
-			 return this.selected.length === 0 ? '' : `${this.selected.length} record${this.selected.length > 1 ? 's' : ''} selected of ${this.data.length}`
+			 return this.selected.length === 0 ? '' : `${this.selected.length} registro${this.selected.length > 1 ? 's' : ''} seleccionado${this.selected.length > 1 ? 's' : ''} de ${this.data.length}`
 		 },
 		onRequest (props) {
 			this.loading = true
@@ -281,37 +337,38 @@ export default {
 }
 </script>
 <style lang="stylus">
-.my-sticky-header-column-table
-  /*
-    specifying max-width so the example can
-    highlight the sticky column on any browser window
-  */
-  // max-width 600px
+// .my-sticky-header-column-table
+	/*
+		specifying max-width so the example can
+		highlight the sticky column on any browser window
+	*/
+	// max-width 600px
 
-  /* max height is important */
-  .q-table__middle
-    max-height 500px
+	 // max height is important 
+// 	.q-table__middle
+// 		max-height 65vh
 
-  .q-table__top,
-  .q-table__bottom,
-  tr:first-child th, /* bg color is important for th; just specify one */
-  td:first-child /* bg color is important for td; just specify one */
-    background-color #fff
+// 	.q-table__top,
+// 	.q-table__bottom,
+// 	tr:first-child th, 
+// 	td:first-child 
+// 		background-color #fff
 
-  tr:first-child th
-    position sticky
-    top 0
-    opacity 1 /* opacity is important */
-    z-index 2 /* higher than z-index for td below */
+// 	tr:first-child th
+// 		position sticky
+// 		top 0
+// 		opacity 1 
+// 		z-index 2 
 
-  tr:first-child th:first-child
-    z-index 3 /* highest z-index */
+// 	tr:first-child th:first-child
+// 		z-index 3 
 
-  td:first-child
-    z-index 1
+// 	td:first-child
+// 		z-index 1
 
-  td:first-child, th:first-child
-    position sticky
-    left 0
-  
+// 	td:first-child, th:first-child
+// 		position sticky
+// 		left 0
+// .text-teal
+// 	color #009688!important
 </style>

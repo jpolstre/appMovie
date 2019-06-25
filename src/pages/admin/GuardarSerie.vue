@@ -4,11 +4,11 @@
 				background-size: cover;
 				background-position: 50% 50%;`:'background-color:white;'">
 
-			<q-breadcrumbs class="q-pa-xs" >
-				<q-breadcrumbs-el  label="Series" to="/admin/series" />
+			<q-breadcrumbs class="q-pa-xs text-grey-8" >
+				<q-breadcrumbs-el label="Series" to="/admin/series" />
 				<q-breadcrumbs-el class="active-breadcrumb" :label="$route.params.serie?'Editar Serie':'Nueva Serie'" />
 			</q-breadcrumbs>
-			<q-separator color="black"/>	
+			<q-separator color="primary"/>	
 			
 			<q-form
 				@submit="onSave"
@@ -248,7 +248,7 @@
 												}
 											}
 
-											form.estado = 1
+											form.estado = true
 											form.detalles_tecnicos = ''
 											// form = temp
 
@@ -328,7 +328,6 @@ export default{
 		}
 	},
 	created(){
-
 		const self =  this
 		this.$axios.get(`${self.$store.state.movie.baseTmdb}genre/tv/list?api_key=${self.$store.state.movie.keyTmdb}&language=es-ES`)
 		.then(r=>{
@@ -353,7 +352,7 @@ export default{
 			for(let key in this.form){
 				this.form[key] = this.$route.params.serie[key]
 			}
-			this.form.estado = this.form.estado*1
+			this.form.estado = this.form.estado == '1'?true:false
 		}else{
 			this.dialogSearch=true
 
@@ -387,7 +386,11 @@ export default{
 				this.$q.loading.show()
 				let sendFormData = new FormData()
 				for(let key in this.form){
-					sendFormData.append(key, this.form[key])
+					if(key == 'estado'){
+						sendFormData.append(key, this.form[key]*1)
+					}else{
+						sendFormData.append(key, this.form[key])
+					}
 				}
 				self.$axios({
 					method: 'post',
@@ -399,7 +402,7 @@ export default{
 					if(r.data.status === 'ok'){
 						self.onReset()
 						this.$q.notify({
-							position: 'top',
+							position: 'bottom',
 							color: 'green-4',
 							textColor:'white',
 							icon: 'thumb_up',
@@ -407,7 +410,7 @@ export default{
 						})
 					}else{
 						this.$q.notify({
-							position: 'top',
+							position: 'bottom',
 							color:'red-5',
 							textColor:'white',
 							icon:'warning',
@@ -418,7 +421,7 @@ export default{
 					self.loadingState = false
 					this.$q.notify({
 						message: 'Error En El Servidor.',
-						position: 'top',
+						position: 'bottom',
 						icon:'warning',
 						color:'red-5'
 					})
