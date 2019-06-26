@@ -4,11 +4,11 @@
 				background-size: cover;
 				background-position: 50% 50%;`:'background-color:white;'">
 
-			<q-breadcrumbs class="q-pa-xs" >
-				<q-breadcrumbs-el  label="Peliculas" to="/admin/peliculas" />
-				<q-breadcrumbs-el class="active-breadcrumb" :label="$route.params.pelicula?'Nueva Pelicula':'Editar Pelicula'" />
+			<q-breadcrumbs class="q-pa-xs text-grey-8" >
+				<q-breadcrumbs-el label="Peliculas" to="/admin/peliculas" />
+				<q-breadcrumbs-el class="active-breadcrumb" :label="$route.params.pelicula?'Editar pelicula':'Nueva pelicula'" />
 			</q-breadcrumbs>
-			<q-separator color="black"/>	
+			<q-separator color="primary"/>	
 			
 			<q-form
 				@submit="onSave"
@@ -64,102 +64,101 @@
 					<br>
 					<label for="qeditor">Detalles Tecnicos</label>
 					<q-editor
-								id="qeditor"
-								flat
-								     content-class="bg-black"
-								     toolbar-text-color="white"
-								     toolbar-toggle-color="yellow-8"
-								     toolbar-flat
-								     toolbar-bg="primary"
-								v-model="form.detalles_tecnicos"
-								:dense="$q.screen.lt.md"
-								:toolbar="[
-									[
-										{
-											label: $q.lang.editor.align,
-											icon: $q.iconSet.editor.align,
-											fixedLabel: true,
-											list: 'only-icons',
-											options: ['left', 'center', 'right', 'justify']
-										},
-										{
-											label: $q.lang.editor.align,
-											icon: $q.iconSet.editor.align,
-											fixedLabel: true,
-											options: ['left', 'center', 'right', 'justify']
-										}
-									],
-									['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
-									['token', 'hr', 'link', 'custom_btn'],
-									['print', 'fullscreen'],
-									[
-										{
-											label: $q.lang.editor.formatting,
-											icon: $q.iconSet.editor.formatting,
-											list: 'no-icons',
-											options: [
-												'p',
-												'h1',
-												'h2',
-												'h3',
-												'h4',
-												'h5',
-												'h6',
-												'code'
-											]
-										},
-										{
-											label: $q.lang.editor.fontSize,
-											icon: $q.iconSet.editor.fontSize,
-											fixedLabel: true,
-											fixedIcon: true,
-											list: 'no-icons',
-											options: [
-												'size-1',
-												'size-2',
-												'size-3',
-												'size-4',
-												'size-5',
-												'size-6',
-												'size-7'
-											]
-										},
-										{
-											label: $q.lang.editor.defaultFont,
-											icon: $q.iconSet.editor.font,
-											fixedIcon: true,
-											list: 'no-icons',
-											options: [
-												'default_font',
-												'arial',
-												'arial_black',
-												'comic_sans',
-												'courier_new',
-												'impact',
-												'lucida_grande',
-												'times_new_roman',
-												'verdana'
-											]
-										},
-										'removeFormat'
-									],
-									['quote', 'unordered', 'ordered', 'outdent', 'indent'],
+						id="qeditor"
+						flat
+						dark
+						content-class="bg-black"
+						toolbar-text-color="white"
+						toolbar-toggle-color="yellow-8"
+						toolbar-flat
+						toolbar-bg="primary"
+						v-model="form.detalles_tecnicos"
+						:dense="$q.screen.lt.md"
+						:toolbar="[
+							[
+								{
+									label: $q.lang.editor.align,
+									icon: $q.iconSet.editor.align,
+									fixedLabel: true,
+									list: 'only-icons',
+									options: ['left', 'center', 'right', 'justify']
+								},
+								{
+									label: $q.lang.editor.align,
+									icon: $q.iconSet.editor.align,
+									fixedLabel: true,
+									options: ['left', 'center', 'right', 'justify']
+								}
+							],
+							['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
+							['token', 'hr', 'link', 'custom_btn'],
+							['print', 'fullscreen'],
+							[
+								{
+									label: $q.lang.editor.formatting,
+									icon: $q.iconSet.editor.formatting,
+									list: 'no-icons',
+									options: [
+										'p',
+										'h1',
+										'h2',
+										'h3',
+										'h4',
+										'h5',
+										'h6',
+										'code'
+									]
+								},
+								{
+									label: $q.lang.editor.fontSize,
+									icon: $q.iconSet.editor.fontSize,
+									fixedLabel: true,
+									fixedIcon: true,
+									list: 'no-icons',
+									options: [
+										'size-1',
+										'size-2',
+										'size-3',
+										'size-4',
+										'size-5',
+										'size-6',
+										'size-7'
+									]
+								},
+								{
+									label: $q.lang.editor.defaultFont,
+									icon: $q.iconSet.editor.font,
+									fixedIcon: true,
+									list: 'no-icons',
+									options: [
+										'default_font',
+										'arial',
+										'arial_black',
+										'comic_sans',
+										'courier_new',
+										'impact',
+										'lucida_grande',
+										'times_new_roman',
+										'verdana'
+									]
+								},
+								'removeFormat'
+							],
+							['quote', 'unordered', 'ordered', 'outdent', 'indent'],
 
-									['undo', 'redo']
-								]"
-								:fonts="{
-									arial: 'Arial',
-									arial_black: 'Arial Black',
-									comic_sans: 'Comic Sans MS',
-									courier_new: 'Courier New',
-									impact: 'Impact',
-									lucida_grande: 'Lucida Grande',
-									times_new_roman: 'Times New Roman',
-									verdana: 'Verdana'
-								}"
-							/>
-
-			
+							['undo', 'redo']
+						]"
+						:fonts="{
+							arial: 'Arial',
+							arial_black: 'Arial Black',
+							comic_sans: 'Comic Sans MS',
+							courier_new: 'Courier New',
+							impact: 'Impact',
+							lucida_grande: 'Lucida Grande',
+							times_new_roman: 'Times New Roman',
+							verdana: 'Verdana'
+						}"
+					/>
 					<div class="q-mt-xl">
 						<q-btn label="Guardar" type="submit" color="primary"/>
 						<q-btn label="Reset" type="reset" color="white" flat class="q-ml-sm" />
@@ -224,16 +223,16 @@
 
 								<q-item-section top avatar>
 									<q-img
-									        :src="`${$store.state.movie.baseTmdbImages}w342/${resultado.poster_path}`"
-									        style="height: 100px; width: 70px;"
-									        :ratio="1"
-									        basic
-									        spinner-color="black"
-									      >
-									        <div class="absolute-bottom text-center text-body">
-									          {{index+1}}
-									        </div>
-									      </q-img>
+											:src="`${$store.state.movie.baseTmdbImages}w342/${resultado.poster_path}`"
+											style="height: 100px; width: 70px;"
+											:ratio="1"
+											basic
+											spinner-color="black"
+											>
+											<div class="absolute-bottom text-center text-body">
+												{{index+1}}
+											</div>
+											</q-img>
 
 								</q-item-section>
 								<q-item-section>
@@ -242,13 +241,13 @@
 											//para que salga ordenadito y solo los campos de form.
 											// let temp = {}
 											onReset()
-											for(var key in form) {
+
+											for(let key in form) {
 												if(resultado[key]){
 													form[key] = resultado[key]+''	
 												}
-
-												
 											}
+
 											form.estado = true
 											form.detalles_tecnicos = ''
 											// form = temp
@@ -295,67 +294,62 @@
 <script>
 
 
-	export default{
-		data(){
-			return{
-				dialogSearch:true,
-				searchText:null,
-				loadingState:false,
-				resultados:[], 
-				totalPages:0,
-				totalResults:0,
+export default{
+	data(){
+		return{
+			dialogSearch:false,
+			searchText:null,
+			loadingState:false,
+			resultados:[], 
+			totalPages:0,
+			totalResults:0,
 
-				generos:[],
+			generos:[],
 
-				form:{//solo los datos que se muestran en la lista de peliculas.
-					id: null,
-					title: null,
-					original_title: null,
-					release_date: null,
-					original_language: null,
-					genre_ids:null,//  [14,36,etc].
-					overview: null,
-					vote_average: null,
-					vote_count: null,
-					popularity: null,
-					poster_path: null,
-					backdrop_path: null,
-					estado:true,
-					url:null,
-					detalles_tecnicos:''
-				}
+			form:{//solo los datos que se muestran en la lista de peliculas.
+				id: null,
+				title: null,
+				original_title: null,
+				release_date: null,
+				original_language: null,
+				genre_ids:null,//  [14,36,etc].
+				overview: null,
+				vote_average: null,
+				vote_count: null,
+				popularity: null,
+				poster_path: null,
+				backdrop_path: null,
+				estado:1,
+				url:null,
+				detalles_tecnicos:''
 			}
-		},
-		created(){
-			const self =  this
-			this.$axios.get(`${self.$store.state.movie.baseTmdb}genre/movie/list?api_key=${self.$store.state.movie.keyTmdb}&language=es-ES`)
-			.then(r=>{
-				self.generos = r.data.genres.map(g=>{
-					let gObj = {}
-					gObj[g.id] = g
-					return gObj
-				})
-			})
-			.catch(r => {
-				self.$q.notify({
-				message: 'Error En El Servidor.',
-				position: 'bottom',
-				icon:'warning',
-				color:'negative'
-				})
-			})
-		},
-		
-	computed:{
+		}
+	},
+	created(){
+	
 
+		// console.log(this.$route.params.pelicula)
+		if(this.$route.params.pelicula){
+			this.dialogSearch=false
+			for(let key in this.form){
+				this.form[key] = this.$route.params.pelicula[key]
+			}
+			this.form.estado = this.form.estado == '1'?true:false
+		}else{
+			this.dialogSearch=true
+
+		}
+		
+	},
+	computed:{
 		sortResults(){
 			return this.resultados.sort(function(a, b){
-					var keyA = new Date(a.release_date),
-							keyB = new Date(b.release_date);
-					// Compare the 2 dates
-					if(keyA > keyB) return -1;
-					if(keyA < keyB) return 1;
-					return 0;
+				var keyA = new Date(a.release_date),
+						keyB = new Date(b.release_date);
+				// Compare the 2 dates
+				if(keyA > keyB) return -1
+				if(keyA < keyB) return 1
+				return 0
 			});
 		}
 	},
@@ -374,7 +368,11 @@
 				this.$q.loading.show()
 				let sendFormData = new FormData()
 				for(let key in this.form){
-					sendFormData.append(key, this.form[key])
+					if(key == 'estado'){
+						sendFormData.append(key, this.form[key]*1)
+					}else{
+						sendFormData.append(key, this.form[key])
+					}
 				}
 				self.$axios({
 					method: 'post',
@@ -386,7 +384,7 @@
 					if(r.data.status === 'ok'){
 						self.onReset()
 						this.$q.notify({
-							position: 'top',
+							position: 'bottom',
 							color: 'green-4',
 							textColor:'white',
 							icon: 'thumb_up',
@@ -394,7 +392,7 @@
 						})
 					}else{
 						this.$q.notify({
-							position: 'top',
+							position: 'bottom',
 							color:'red-5',
 							textColor:'white',
 							icon:'warning',
@@ -405,7 +403,7 @@
 					self.loadingState = false
 					this.$q.notify({
 						message: 'Error En El Servidor.',
-						position: 'top',
+						position: 'bottom',
 						icon:'warning',
 						color:'red-5'
 					})
@@ -414,7 +412,7 @@
 		},
 
 		onReset () {
-			this.form = {
+			this.form ={
 				id: null,
 				title: null,
 				original_title: null,
@@ -427,98 +425,73 @@
 				popularity: null,
 				poster_path: null,
 				backdrop_path: null,
-				estado:true,
+				estado:1,
 				url:null,
 				detalles_tecnicos:''
 			}
 		},
-
-
-
-			onLoad(index, done){
-
-				// console.log(index+1)
-				// console.log(this.totalPages)
-
+		onLoad(index, done){
+			// console.log(index+1)
+			// console.log(this.totalPages)
+			const self = this
+			if(index+1 <= this.totalPages){
+				this.$axios.get(`${self.$store.state.movie.baseTmdb}search/movie?api_key=${self.$store.state.movie.keyTmdb}&language=es-ES&query=${self.searchText}&page=${index+1}&include_adult=false`)
+				.then(r=>{
+					for(let i=0;i<r.data.results.length;i++){
+						self.resultados[i].vote_average =  Math.round(self.resultados[i].vote_average*1)
+						self.resultados[i].estado = 1
+						self.resultados.push(r.data.results[i])
+					}
+					done()
+				})
+				.catch(r => {
+					self.$q.notify({
+					message: 'Error En El Servidor.',
+					position: 'bottom',
+					icon:'warning',
+					color:'negative'
+					})
+				})
+			}
+			return false
+		
+		},
+		onSearch(){
+			// console.log(this.searchText)
+			if(!this.searchText){
+				this.$q.notify({
+					color: 'red-5',
+					textColor: 'white',
+					icon: 'warning',
+					message: 'Debes introducir un titulo'
+				})
+				this.searchText = null
+			}else{
+				this.resultados = []
+				this.loadingState = true
 				const self = this
-				if(index+1 <= this.totalPages){
-					this.$axios.get(`${self.$store.state.movie.baseTmdb}search/movie?api_key=${self.$store.state.movie.keyTmdb}&language=es-ES&query=${self.searchText}&page=${index+1}&include_adult=false`)
-					.then(r=>{
-						for(let i=0;i<r.data.results.length;i++){
-							self.resultados[i].vote_average =  Math.round(self.resultados[i].vote_average*1)
-							self.resultados[i].estado = true
-							self.resultados.push(r.data.results[i])
-						}
-						done()
-					})
-					.catch(r => {
-						self.$q.notify({
-						message: 'Error En El Servidor.',
-						position: 'bottom',
-						icon:'warning',
-						color:'negative'
-						})
-					})
-				}
-				return false
-
-				// setTimeout(() => {
-				// 	if (this.resultados) {
-				// 		this.resultados.push({
-				// 			title:'Hola',
-				// 			overview:'Una revision',
-				// 			release_date:'1980-10-11'
-				// 		})
-				// 		done()
-				// 	}
-				// }, 2000)
-
-			},
-
-			onSearch(){
-
-				// console.log(this.searchText)
-				if(!this.searchText){
-					this.$q.notify({
-						color: 'red-5',
-						textColor: 'white',
-						icon: 'warning',
-						message: 'Debes introducir un titulo'
-					})
-					this.searchText = null
-
-				}else{
+				this.$axios.get(`${self.$store.state.movie.baseTmdb}search/movie?api_key=${self.$store.state.movie.keyTmdb}&language=es-ES&query=${self.searchText}&page=1&include_adult=false`)
+				.then(r=>{
+					self.resultados = r.data.results
+					for (let i=0;i<r.data.results.length;i++) {
+						self.resultados[i].vote_average =  Math.round(self.resultados[i].vote_average*1)
+						self.resultados[i].estado = 1
+					}
+					self.totalResults = r.data.total_results
+					self.totalPages = r.data.total_pages
+					self.loadingState = false
+				})
+				.catch(r => {
 					this.resultados = []
-					this.loadingState = true
-					const self = this
-
-
-					this.$axios.get(`${self.$store.state.movie.baseTmdb}search/movie?api_key=${self.$store.state.movie.keyTmdb}&language=es-ES&query=${self.searchText}&page=1&include_adult=false`)
-					.then(r=>{
-						self.resultados = r.data.results
-						for (let i=0;i<r.data.results.length;i++) {
-							self.resultados[i].vote_average =  Math.round(self.resultados[i].vote_average*1)
-							self.resultados[i].estado = true
-						}
-						self.totalResults = r.data.total_results
-						self.totalPages = r.data.total_pages
-						self.loadingState = false
+					self.$q.notify({
+					message: 'Error En El Servidor.',
+					position: 'bottom',
+					icon:'warning',
+					color:'negative'
 					})
-					.catch(r => {
-						this.resultados = []
-						self.$q.notify({
-						message: 'Error En El Servidor.',
-						position: 'bottom',
-						icon:'warning',
-						color:'negative'
-						})
-					})
-
-
-				}
-				
-			},
-
-		}
+				})
+			}
+		},
 	}
+}
 </script>

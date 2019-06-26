@@ -81,7 +81,7 @@
 				</template> -->
 
 				<template v-slot:body-cell-detalles_tecnicos="props">
-					<span v-html="props.row.detalles_tecnicos"></span>
+					<td v-html="props.row.detalles_tecnicos"></td>
 				</template>
 
 				<template v-slot:body-cell-poster_path="props">
