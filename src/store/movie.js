@@ -22,7 +22,7 @@ export default {
 
 		rememberLogin:{name:'', pass:'', tipo:''},
 		
-		filtro:{idGenero:null, year:null, titulo:null, letra:null, idCalidad:null, director:null, reparto:null },
+		filtro:{categoria:null, idGenero:null, year:null, titulo:null, letra:null, idCalidad:null, director:null, reparto:null },
 
 		paginaMeta: {},
 		usuario:{
@@ -183,22 +183,44 @@ export default {
 				estado:true,
 			}
 
+		},
+
+		categorias:{
+
+			1:{
+				label:'Peliculas'
+			},
+			2:{
+				label:'Series'
+			}
 		}
+
 	},
+
+	
 
 	//mutaciones
 	mutations: {
 		actualizarFiltro(state, opt){
 			// console.log(state.filtro)
-			let keys = Object.keys(state.filtro)
-				keys.forEach(key=>{
-					if(opt[key]){
-					state.filtro[key] = opt[key]
-				}else{
-					state.filtro[key] = null
-				}
+
+			// let keys = Object.keys(state.filtro)
+			// 	keys.forEach(key=>{
+			// 		if(opt[key]){
+			// 		state.filtro[key] = opt[key]
+			// 	}
+			// 	else{
+			// 		state.filtro[key] = null
+			// 	}
+			// })
+
+			let keys = Object.keys(opt)
+			keys.forEach(key=>{
+				state.filtro[key] = opt[key]
 			})
+
 		},
+
 
 		
 

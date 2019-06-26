@@ -1,49 +1,73 @@
 <template>
-  <q-page padding>
-	 <q-chip outline removable v-show="filtro.icon" @remove="$store.commit('movie/actualizarFiltro', {})" color="primary" text-color="white" >    
-	 		<q-icon :name="filtro.icon" style="color: #000; font-size: 1.4em;"/>&nbsp;&nbsp;{{filtro.txt}}
-	 		
-		</q-chip>
+	
+	<q-page padding>
+		<q-card flat bordered class="q-ma-none q-pa-none" v-if="filtro.length">
+
+			<q-card-section>
+			        <div class="text-subtitle2">Filtros</div>
+			      </q-card-section>
+		     <q-card-section>
+		      
+		     
+			<q-chip v-for="item in filtro" :key="item.txt" class="animate-pop" outline removable v-show="item.icon" @remove="delFilter(item)" color="primary" text-color="white" >    
+				<q-icon :name="item.icon" style="color: #000; font-size: 1.4em;"/>&nbsp;&nbsp;{{item.txt}}
+			</q-chip>
+			</q-card-section>
+		</q-card>
 	<!-- <img alt="Quasar logo" src="~assets/quasar-logo-full.svg"> -->
 	<!-- {{$store.state.movie.filtro}} -->
-  </q-page>
+	</q-page>
 </template>
 
 <style>
-</style>
+</style>s
 
 <script>
 export default {
-  name: 'PageIndex',
+	name: 'PageIndex',
 
-  data(){
-	return{
-		
-	}
-  },
-  computed:{
-	filtro(){
-		let valReturn =  {}
-		let keys = Object.keys(this.$store.state.movie.filtro)
-		keys.forEach(key=>{
-			let value = this.$store.state.movie.filtro[key]
-			if(value){//la primre valor q no es null
-				switch(key){
-					case 'idGenero':
-						valReturn =  {txt:this.$store.state.movie.generos[value].nombre_es, icon:`img:statics/generos/svg/${this.$store.state.movie.generos[value].imagen}`}
-					break;
-					case 'year':
-						valReturn = {txt:value, icon:'calendar_today'}
-					break;
-					case 'letra':
-						valReturn = {txt:value, icon:'format_align_center'}
-					break;
+		data(){
+		return{
+			
+		}
+	},
+	computed:{
+		filtro(){
+			let valReturn, arrReturn = []
+			let keys = Object.keys(this.$store.state.movie.filtro)
+			keys.forEach(key=>{
+				let value = this.$store.state.movie.filtro[key]
+				if(value){//la primre valor q no es null
+					switch(key){
+						case 'idGenero':
+							valReturn =  {key:key, txt:this.$store.state.movie.generos[value].nombre_es, icon:`img:statics/generos/svg/${this.$store.state.movie.generos[value].imagen}`}
+
+						break;
+						case 'year':
+							valReturn = {key:key, txt:value, icon:'calendar_today'}
+						break;
+						case 'letra':
+							valReturn = {key:key, txt:value, icon:'format_align_center'}
+						break;
+						case 'categoria':
+							valReturn = {key:key, txt:value, icon:'movie_filter'}
+						break;
+					}
+
+					arrReturn.push(valReturn)
+
 				}
-			}
-		})
-		return valReturn	
-		
+			})
+			return arrReturn
+		}
+
+	},
+	methods:{
+		delFilter(item){
+			let obj = {}
+			obj[item.key] = null
+			this.$store.commit('movie/actualizarFiltro', obj)
+		}
 	}
-  }
 }
 </script>

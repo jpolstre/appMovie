@@ -33,8 +33,32 @@
 		<q-scroll-area  style="height:calc(100% - 50px);margin-top:50px;">
 			<q-separator/>
 			<q-list dense>
+
+				<q-expansion-item
+					icon="bluetooth"
+					label="Categorias"
+					header-class="bg-primary text-white"
+					expand-icon-class="text-white"
+					default-opened
+				>
+					<q-card class="bg-orange-2">
+						<q-card-section>
+				<!-- 			<q-btn class="full-width q-mb-xs" color="white" text label="Peliculas" />
+							<q-btn class="full-width q-mb-xs" color="white" text label="Series" /> -->
+							<div v-for="categoria in $store.state.movie.categorias" :key="categoria.label">
+								<q-btn class="full-width q-mt-xs" :color="$store.state.movie.filtro.categoria==categoria.label?'primary':'white'" :text-color="$store.state.movie.filtro.categoria==categoria.label?'white':'black'" :label="categoria.label" @click="$store.commit('movie/actualizarFiltro', {categoria:categoria.label})"/>
+							</div>
+							
+
+						</q-card-section>
+					</q-card>
+				</q-expansion-item>
+
+				<q-separator />
 					
 			<!-- <q-separator/> -->
+
+
 					
 						<q-expansion-item
 							icon="explore"
@@ -42,11 +66,11 @@
 							default-opened
 							header-class="text-primary"
 						>
-							<q-card>
+<!-- 							<q-card>
 								<q-card-section>
 									<q-list dense>
 
-										<!-- <q-item-label header @click="displayStatus">Notifications</q-item-label> -->
+									
 
 												 <q-item tag="label" v-ripple  v-for="genero in $store.state.movie.generos" :key="genero.id">
 													<q-item-section avatar>
@@ -56,42 +80,23 @@
 														 <q-item-label>{{genero.nombre_es}}</q-item-label>
 													 </q-item-section>
 													 <q-item-section side >
-														 <!-- <q-toggle color="blue" v-model="estados" :val="genero.id" @input="changeToggle"/> -->
+														
 														 <q-radio v-model="$store.state.movie.filtro.idGenero" :val="genero.id" color="teal" @input="(value)=>{
 																$store.commit('movie/actualizarFiltro', {idGenero:value})
 														 }"/>
 													 </q-item-section>
 												 </q-item>
-
-											 
-
-									<!-- 	<q-item tag="label" v-ripple   v-for="genero in $store.state.movie.generos" :key="genero.id">
-												<q-item-section avatar>
-													<q-icon :name="`img:statics/generos/${genero.imagen}`" />
-
-												</q-item-section>
-														<q-item-section>
-															<q-item-label>{{genero.nombre_es}}</q-item-label>
-														</q-item-section>
-														<q-item-section side >
-															<q-toggle color="blue" v-model="estados[genero.id]" val="battery" />
-														</q-item-section>
-													</q-item>
-				 -->
-			
-
-
-										<!-- <q-item clickable tag="a" target="_blank" href="https://quasar.dev">
-											<q-item-section avatar>
-												<q-icon name="school" />
-											</q-item-section>
-											<q-item-section>
-												<q-item-label>Docs</q-item-label>
-												<q-item-label caption>quasar.dev</q-item-label>
-											</q-item-section>
-										</q-item> -->
-										
 									</q-list>
+								</q-card-section>
+							</q-card> -->
+
+							<q-card>
+								<q-card-section>
+									<div class="col full-height row items-center">
+										<div class="q-date__years-item flex flex-center q-mt-xs" v-for="genero in $store.state.movie.generos" :key="genero.id">
+											<q-btn :color="$store.state.movie.filtro.idGenero==genero.id?'primary':'white'" size="sm" :text-color="$store.state.movie.filtro.idGenero==genero.id?'white':'black'" :label="genero.nombre_es" @click="$store.commit('movie/actualizarFiltro', {idGenero:genero.id})"/>
+										</div>
+									</div>
 								</q-card-section>
 							</q-card>
 						</q-expansion-item>
@@ -120,24 +125,6 @@
 											<q-btn :color="$store.state.movie.filtro.letra==String.fromCharCode(64+index)?'primary':'white'" size="sm" :text-color="$store.state.movie.filtro.letra==String.fromCharCode(64+index)?'white':'black'" :label="String.fromCharCode(64+index)" @click="$store.commit('movie/actualizarFiltro', {letra:String.fromCharCode(64+index)})"/>
 										</div>
 									</div>
-								</q-card-section>
-							</q-card>
-						</q-expansion-item>
-
-						<q-separator />
-
-						<q-expansion-item
-							icon="bluetooth"
-							label="Fourth"
-							header-class="bg-teal text-white"
-							expand-icon-class="text-white"
-							default-opened
-						>
-							<q-card class="bg-teal-2">
-								<q-card-section>
-									Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti
-									commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste
-									eveniet doloribus ullam aliquid.
 								</q-card-section>
 							</q-card>
 						</q-expansion-item>

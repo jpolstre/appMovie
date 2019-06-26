@@ -1,5 +1,5 @@
 <template>
-	 <q-page padding  class="q-mt-none q-pt-none bg-grey-9 text-white">
+	 <q-page padding  class="q-mt-none q-pt-none">
 
 		<!-- <h6 class="q-my-xs q-pt-none">Peliculas</h6> -->
 		<!-- <q-btn color="primary" icon="thumb_up" label="test" class="animate-pop"/> -->
@@ -20,9 +20,7 @@
 				 -->
 
 		<q-table
-			dark
 			
-			flat
 
 			title="Treats"
 			:data="data"
