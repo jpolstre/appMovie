@@ -34,14 +34,17 @@
 			<q-separator/>
 			<q-list dense>
 
+			<!-- header-class="bg-primary text-white" -->
+			<!-- 	expand-icon-class="text-primary" -->
 				<q-expansion-item
 					icon="bluetooth"
 					label="Categorias"
-					header-class="bg-primary text-white"
-					expand-icon-class="text-white"
+					header-class="text-primary"
+				
 					default-opened
 				>
-					<q-card class="bg-orange-2">
+				<!--  class="bg-orange-2" -->
+					<q-card>
 						<q-card-section>
 				<!-- 			<q-btn class="full-width q-mb-xs" color="white" text label="Peliculas" />
 							<q-btn class="full-width q-mb-xs" color="white" text label="Series" /> -->

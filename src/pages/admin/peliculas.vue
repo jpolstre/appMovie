@@ -81,7 +81,8 @@
 				<template v-slot:body-cell-genre_ids="props">
 					<td>
 						<q-chip clickable dense icon="bookmark" v-for="genre_id in props.row.genre_ids.split(',')" :key="genre_id">
-							{{getGenero(genre_id)}}
+							<!-- {{getGenero(genre_id)}} -->
+							{{generos[genre_id].name}}
 						</q-chip>
 					</td>
 				</template>
@@ -166,19 +167,29 @@ export default {
 
 		}
 	},
-	mounted () {
+	created () {
+		const self =  this
+		this.$store.state.movie.generos.then((resp)=>{
+			// console.log(resp)
+			self.generos = resp
+			console.log(self.generos)
+				self.onRequest({
+			pagination: self.pagination,
+			filter: ''
+		})
+
+		})
+		
+
+	
 		// get initial data from server (1st page)
 
-		const self =  this
+/*		const self =  this
 		this.$axios.get(`${self.$store.state.movie.baseTmdb}genre/movie/list?api_key=${self.$store.state.movie.keyTmdb}&language=es-ES`)
 		.then(r=>{
-			// self.generos = r.data.genres.map(g=>{
-			// 	let gObj = {}
-			// 	gObj[g.id] = g
-			// 	return gObj
-			// })
+		
 			self.generos = r.data.genres
-			console.log(self.generos)
+		
 			self.onRequest({
 				pagination: this.pagination,
 				filter: ''
@@ -192,16 +203,16 @@ export default {
 			color:'negative'
 			})
 		})
-		
+		*/
 	},
 	methods: {
-		getGenero(id){
-			for(let i=0;i<this.generos.length;i++){
-				if(this.generos[i].id==id){
-					return this.generos[i].name
-				}
-			}
-		},
+		// getGenero(id){
+		// 	for(let i=0;i<this.generos.length;i++){
+		// 		if(this.generos[i].id==id){
+		// 			return this.generos[i].name
+		// 		}
+		// 	}
+		// },
 
 
 		deletePelicula(item){

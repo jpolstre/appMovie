@@ -1,24 +1,56 @@
 
 
-// import axios from 'axios'
-
-const  url = 'https://apimovie.corprotec.com/'
+import axios from 'axios'
 
 
 // const  url = 'http://localhost/apimovie/'
 
+function getGenerosPeliculas() {
+	return axios.get(`https://api.themoviedb.org/3/genre/movie/list?api_key=8bd1f0324e19b04b41ed5c8d182ca1ce&language=es-ES`);
+}
+
+function getGenerosSeries() {
+	return axios.get(`https://api.themoviedb.org/3/genre/tv/list?api_key=8bd1f0324e19b04b41ed5c8d182ca1ce&language=es-ES`);
+}
+
+
+// async y await  es para construir promesas, en este caso getGeneros es una promesa
+async function getGeneros(){
+	// const res = await axios('/data');
+	// return await res.json();
+
+	const res = await axios.all([getGenerosPeliculas(), getGenerosSeries()])
+	// console.log(res)//ok
+
+	var arr = res[0].data.genres.concat(res[1].data.genres), len = arr.length, array3=[];
+	let obj = {}
+	while (len--) {
+		var itm = arr[len];
+		if (array3.indexOf(itm) === -1) {
+			array3.unshift(itm);
+			obj[itm.id]=itm
+		}
+	}
+	// console.log(obj)
+	return obj
+	// return res//ok
+		// .then(axios.spread(function (acct, perms) {
+		// 	// Both requests are now complete
+		// }));
+}
+
+
+
 export default {
 	namespaced: true,
-
-
-
-
  //estados
 	state: {
-
+		generos:getGeneros(),
 		keyTmdb: '8bd1f0324e19b04b41ed5c8d182ca1ce',
 		baseTmdb: 'https://api.themoviedb.org/3/',
 		baseTmdbImages: 'https://image.tmdb.org/t/p/',
+		baseUrl:'https://apimovie.corprotec.com/',
+
 
 		rememberLogin:{name:'', pass:'', tipo:''},
 		
@@ -35,7 +67,7 @@ export default {
 			imagen:false,
 		},
 		estadoConeccion:null,
-		baseUrl:url,
+		
 		//obtener por ajaxa (axios)
 		calidad:[
 			{
@@ -88,7 +120,7 @@ export default {
 		],
 
 
-		generos:{
+	/*	generos:{
 			1:{
 				id:1,
 				nombre_es:'Accion',
@@ -183,7 +215,7 @@ export default {
 				estado:true,
 			}
 
-		},
+		},*/
 
 		categorias:{
 
@@ -228,12 +260,12 @@ export default {
 
 			for (let prop in state.generos) {
 
-			  if(idsGenerosTrue.indexOf(state.generos[prop].id) !== -1){
-			  	state.generos[prop].estado = true
-			  }else{
-			  	state.generos[prop].estado = false
+				if(idsGenerosTrue.indexOf(state.generos[prop].id) !== -1){
+					state.generos[prop].estado = true
+				}else{
+					state.generos[prop].estado = false
 
-			  }
+				}
 			}
 
 		
