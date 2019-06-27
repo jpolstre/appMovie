@@ -45,7 +45,8 @@ export default {
 	namespaced: true,
  //estados
 	state: {
-		generos:getGeneros(),
+		getGeneros:getGeneros(),
+		generos:{},
 		keyTmdb: '8bd1f0324e19b04b41ed5c8d182ca1ce',
 		baseTmdb: 'https://api.themoviedb.org/3/',
 		baseTmdbImages: 'https://image.tmdb.org/t/p/',
@@ -233,6 +234,9 @@ export default {
 
 	//mutaciones
 	mutations: {
+		setGeneros(state, val){
+			state.generos = val
+		},
 		actualizarFiltro(state, opt){
 			// console.log(state.filtro)
 

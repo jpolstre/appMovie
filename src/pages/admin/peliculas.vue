@@ -82,7 +82,7 @@
 					<td>
 						<q-chip clickable dense icon="bookmark" v-for="genre_id in props.row.genre_ids.split(',')" :key="genre_id">
 							<!-- {{getGenero(genre_id)}} -->
-							{{generos[genre_id].name}}
+							{{$store.state.movie.generos[genre_id].name}}
 						</q-chip>
 					</td>
 				</template>
@@ -120,7 +120,7 @@
 export default {
 	data () {
 		return {
-			generos:{},
+			// generos:{},
 
 			selected: [],
 			filter: '',
@@ -168,19 +168,24 @@ export default {
 		}
 	},
 	created () {
-		const self =  this
-		this.$store.state.movie.generos.then((resp)=>{
-			// console.log(resp)
-			self.generos = resp
-			console.log(self.generos)
-				self.onRequest({
-			pagination: self.pagination,
+		// const self =  this
+		// this.$store.state.movie.generos.then((resp)=>{
+		// 	// console.log(resp)
+		// 	self.generos = resp
+		// 	console.log(self.generos)
+		// 		self.onRequest({
+		// 	pagination: self.pagination,
+		// 	filter: ''
+		// })
+
+		// })
+
+		// this.generos = this.$store.state.movie.generos
+		
+		this.onRequest({
+			pagination: this.pagination,
 			filter: ''
 		})
-
-		})
-		
-
 	
 		// get initial data from server (1st page)
 

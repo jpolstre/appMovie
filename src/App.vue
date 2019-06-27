@@ -17,6 +17,17 @@ export default {
 						return orig.call(window, str).replace(/!/g, '%21');
 				};
 		}();
+
+
+		const self =  this
+		this.$store.state.movie.getGeneros.then((resp)=>{
+			// console.log(resp)
+			// self.generos = resp
+			
+			self.$store.commit('movie/setGeneros', resp)
+
+
+		})
 	}
 }
 </script>

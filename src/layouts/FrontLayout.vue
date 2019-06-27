@@ -97,7 +97,7 @@
 								<q-card-section>
 									<div class="col full-height row items-center">
 										<div class="q-date__years-item flex flex-center q-mt-xs" v-for="genero in $store.state.movie.generos" :key="genero.id">
-											<q-btn :color="$store.state.movie.filtro.idGenero==genero.id?'primary':'white'" size="sm" :text-color="$store.state.movie.filtro.idGenero==genero.id?'white':'black'" :label="genero.nombre_es" @click="$store.commit('movie/actualizarFiltro', {idGenero:genero.id})"/>
+											<q-btn :color="$store.state.movie.filtro.idGenero==genero.id?'primary':'white'" size="sm" :text-color="$store.state.movie.filtro.idGenero==genero.id?'white':'black'" :label="genero.name" @click="$store.commit('movie/actualizarFiltro', {idGenero:genero.id})"/>
 										</div>
 									</div>
 								</q-card-section>
