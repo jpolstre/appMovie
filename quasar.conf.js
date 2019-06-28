@@ -73,7 +73,8 @@ module.exports = function (ctx) {
 				'QInfiniteScroll',
 				'QSpinnerDots',
 				'QPageScroller',
-				'QTooltip'
+				'QTooltip',
+				'QPagination'
 	
 
 			],

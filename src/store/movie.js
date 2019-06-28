@@ -1,6 +1,7 @@
 
 
 import axios from 'axios'
+import { colors } from 'quasar'
 
 
 // const  url = 'http://localhost/apimovie/'
@@ -40,11 +41,24 @@ async function getGeneros(){
 }
 
 
+// const darkTheme = {
+// 	primary: "#222222",
+// 	secondary: "#111111",
+// 	accent: "#333333"
+// };
+
+// const lightTheme = {
+// 	primary: "#cce6ff",
+// 	secondary: "#0052a3",
+// 	accent: "#f57b00"
+// };
 
 export default {
 	namespaced: true,
  //estados
 	state: {
+		theme:{},
+		categoria:{	label:'Películas '},
 		getGeneros:getGeneros(),
 		generos:{},
 		keyTmdb: '8bd1f0324e19b04b41ed5c8d182ca1ce',
@@ -54,8 +68,8 @@ export default {
 
 
 		rememberLogin:{name:'', pass:'', tipo:''},
-		
-		filtro:{categoria:null, idGenero:null, year:null, titulo:null, letra:null, idCalidad:null, director:null, reparto:null },
+		// categoria:null,
+		filtro:{ idGenero:null, year:null, titulo:null, letra:null, idCalidad:null, director:null, reparto:null },
 
 		paginaMeta: {},
 		usuario:{
@@ -221,7 +235,7 @@ export default {
 		categorias:{
 
 			1:{
-				label:'Peliculas'
+				label:'Películas '
 			},
 			2:{
 				label:'Series'
@@ -234,6 +248,30 @@ export default {
 
 	//mutaciones
 	mutations: {
+		SET_THEME(state, newTheme){
+			state.theme = newTheme
+			const keys = Object.keys(state.theme)
+			keys.forEach(key=>{
+				colors.setBrand(key, state.theme[key])
+			})
+			// if(nameTheme == 'Light'){
+			// 	state.theme = lightTheme;
+			// 	colors.setBrand("primary", lightTheme.primary);
+			// 	colors.setBrand("secondary", lightTheme.secondary);
+			// 	colors.setBrand("accent", lightTheme.accent);
+			// }else{
+			// 	state.theme = darkTheme;
+			// 	colors.setBrand("primary", darkTheme.primary);
+			// 	colors.setBrand("secondary", darkTheme.secondary);
+			// 	colors.setBrand("accent", darkTheme.accent);
+			// }
+			
+		},
+	
+		actualizarCategoria(state, val){
+			state.categoria = val
+		},
+
 		setGeneros(state, val){
 			state.generos = val
 		},

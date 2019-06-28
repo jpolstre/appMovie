@@ -7,7 +7,10 @@
 <script>
 export default {
 	name: 'App',
-	created(){
+	mounted(){
+
+	
+
 		// adds '!' to encodeURIComponent
 		~function () {
 				var orig = window.encodeURIComponent;
@@ -17,6 +20,20 @@ export default {
 						return orig.call(window, str).replace(/!/g, '%21');
 				};
 		}();
+
+		if(this.$store.state.movie.categoria.label === 'Series'){
+			this.$store.commit('movie/SET_THEME', {
+					primary: "#027BE3",
+					secondary: "#263238",
+					accent: "#333333"
+				})
+		}else{
+				this.$store.commit('movie/SET_THEME', {
+				primary: "#ef6c00",
+				secondary: "#111111",
+				accent: "#333333"
+			})
+		}
 
 
 		const self =  this

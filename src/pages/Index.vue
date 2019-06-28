@@ -1,51 +1,68 @@
 <template>
 	
-	<q-page padding>
-		<q-card flat bordered class="q-ma-none q-pa-none" v-if="filtro.length">
-
-
-
-
-
+	<q-page padding class="bg-secondary text-white">
+		<h6 class="q-ma-none q-pa-none">	{{$store.state.movie.categoria.label}}</h6 class="q-my-none q-py-none">
+		<q-card flat bordered class="q-ma-none q-pa-none bg-secondary text-white" v-if="filtro.length">
 			<q-card-section class="q-mb-none q-pb-none">
-
 				<div class="row items-center no-wrap">
-									<div class="col">
-										<!-- <div class="text-h6">Filtros</div> -->
-										<div class="text-subtitle2">Filtros</div>
-									</div>
-
-									<div class="col-auto">
-										<q-btn class="animate-pop" color="grey-7" round flat icon="delete_forever" @click="resetFilter"/>
-									</div>
+					<div class="col">
+						<!-- <div class="text-h6">Filtros</div> -->
+						<div class="text-subtitle3">Filtros</div>
+					</div>
+					<div class="col-auto">
+						<q-btn class="animate-pop" color="grey-7" round flat icon="delete_forever" @click="resetFilter"/>
+					</div>
 				</div>
-						
 			</q-card-section>
-				 <q-card-section>
-					
-				 
-			<q-chip v-for="item in filtro" :key="item.txt" class="animate-pop"  outline removable v-show="item.icon" @remove="delFilter(item)" color="primary" text-color="white" >    
-				<q-icon :name="item.icon" style="color: #000; font-size: 1.4em;"/>&nbsp;&nbsp;{{item.txt}}
-			</q-chip>
+			<q-card-section>
+				<q-chip v-for="item in filtro" :key="item.txt" class="animate-pop"  outline removable v-show="item.icon" @remove="delFilter(item)" color="primary" text-color="white" >    
+					<q-icon :name="item.icon"  class="text-primary" style="font-size: 1.4em;"/>&nbsp;&nbsp;{{item.txt}}
+				</q-chip>
 			</q-card-section>
 		</q-card>
-	<!-- <img alt="Quasar logo" src="~assets/quasar-logo-full.svg"> -->
-	<!-- {{$store.state.movie.filtro}} -->
+		<!-- <img alt="Quasar logo" src="~assets/quasar-logo-full.svg"> -->
+		<!-- {{$store.state.movie.filtro}} -->
+		<div class="q-pa-lg flex flex-center">
+			<q-pagination
+				v-model="pagination.page"
+				color="primary"
+				:max="Math.ceil(pagination.rowsNumber/pagination.rowsPerPage)"
+				:max-pages="pagination.rowsPerPage"
+				:boundary-numbers="true"
+				@input="onPaginate"
+			>
+			</q-pagination>
+		</div>
 	</q-page>
 </template>
-
-<style>
-</style>s
-
 <script>
 export default {
 	name: 'PageIndex',
 
 		data(){
 		return{
-			
+			// current: 5,
+			data: [],
+			filter: '',
+			// loading: false,
+			pagination: {
+				sortBy: 'title',
+				descending: false,
+				page: 1,
+				rowsPerPage:10,//0 all
+				rowsNumber: 10
+			},
+
 		}
 	},
+
+	created(){
+		this.onRequest({
+			pagination: this.pagination,
+			filter: ''
+		})
+	},
+
 	computed:{
 		filtro(){
 			let valReturn, arrReturn = []
@@ -65,9 +82,9 @@ export default {
 						case 'letra':
 							valReturn = {key:key, txt:value, icon:'format_align_center'}
 						break;
-						case 'categoria':
-							valReturn = {key:key, txt:value, icon:'movie_filter'}
-						break;
+						// case 'categoria':
+						// 	valReturn = {key:key, txt:value, icon:'movie_filter'}
+						// break;
 					}
 
 					arrReturn.push(valReturn)
@@ -78,7 +95,87 @@ export default {
 		}
 
 	},
+
 	methods:{
+		onPaginate(value){
+			if(this.pagination.page == value){
+				console.log(value)
+
+			}
+
+			this.onRequest({
+				pagination: this.pagination,
+				filter: ''
+			})
+		},
+
+		onRequest (props) {
+			this.$q.loading.show()
+			let { page, rowsPerPage, rowsNumber, sortBy, descending } = props.pagination
+			let filter
+			const self =  this
+
+			if(props.filter == ''){
+				filter = undefined
+			}else{ 
+				filter = props.filter
+			}
+		
+
+				filter = encodeURIComponent(filter)
+				this.$axios.get(`${self.$store.state.movie.baseUrl}getRowsNumberCount/pelicula/${filter}/title__original_title`)
+				.then(r=>{
+					self.pagination.rowsNumber = r.data.length
+					// get all rows if "All" (0) is selected
+					let fetchCount = rowsPerPage === 0 ? 	self.pagination.rowsNumber : rowsPerPage//
+
+					// calculate starting row of data
+					let startRow = (page - 1) * rowsPerPage
+
+					// fetch data from "server"
+				
+					// fetchFromServer($tabla, $startRow, $count, $sortBy, $direction, $filter, $fieldsFilter)
+
+					// let returnedData = this.fetchFromServer(startRow, fetchCount, filter, sortBy, descending)
+
+					self.$axios.get(`${self.$store.state.movie.baseUrl}fetchFromServer/pelicula/${startRow}/${fetchCount}/${sortBy}/${descending}/${filter}/title__original_title`)
+					.then(r=>{
+
+						let returnedData = r.data.results
+						// clear out existing data and add new
+						self.data.splice(0, self.data.length, ...returnedData)
+
+						// don't forget to update local pagination object
+						self.pagination.page = page
+						self.pagination.rowsPerPage = rowsPerPage
+						self.pagination.sortBy = sortBy
+						self.pagination.descending = descending
+
+						// ...and turn of loading indicator
+						self.$q.loading.hide()
+		
+					})
+					.catch(r => {
+						self.$q.loading.hide()
+						self.$q.notify({
+						message: 'Error En El Servidor.',
+						position: 'bottom',
+						icon:'warning',
+						color:'negative'
+						})
+					})
+
+				})
+				.catch(r => {
+					self.$q.loading.hide()
+					self.$q.notify({
+					message: 'Error En El Servidor.',
+					position: 'bottom',
+					icon:'warning',
+					color:'negative'
+					})
+				})
+		},
 		delFilter(item){
 			let obj = {}
 			obj[item.key] = null
@@ -96,3 +193,7 @@ export default {
 	}
 }
 </script>
+<style lang="stylus" >
+	@import 'quasar.variables'
+	$primary = $red
+</style>

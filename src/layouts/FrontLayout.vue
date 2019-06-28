@@ -49,7 +49,10 @@
 				<!-- 			<q-btn class="full-width q-mb-xs" color="white" text label="Peliculas" />
 							<q-btn class="full-width q-mb-xs" color="white" text label="Series" /> -->
 							<div v-for="categoria in $store.state.movie.categorias" :key="categoria.label">
-								<q-btn class="full-width q-mt-xs" :color="$store.state.movie.filtro.categoria==categoria.label?'primary':'white'" :text-color="$store.state.movie.filtro.categoria==categoria.label?'white':'black'" :label="categoria.label" @click="$store.commit('movie/actualizarFiltro', {categoria:categoria.label})"/>
+
+								<!-- :color="$store.state.movie.categoria.label==categoria.label?'primary':'white'" :text-color="$store.state.movie.categoria.label==categoria.label?'white':'black'" -->
+								<q-btn class="full-width q-mt-xs" :class="$store.state.movie.categoria.label==categoria.label?'bg-primary text-white':'bg-white text-black'" 
+								 :label="categoria.label" @click="changeCategoria(categoria)"/>
 							</div>
 							
 
@@ -97,7 +100,8 @@
 								<q-card-section>
 									<div class="col full-height row items-center">
 										<div class="q-date__years-item flex flex-center q-mt-xs" v-for="genero in $store.state.movie.generos" :key="genero.id">
-											<q-btn :color="$store.state.movie.filtro.idGenero==genero.id?'primary':'white'" size="sm" :text-color="$store.state.movie.filtro.idGenero==genero.id?'white':'black'" :label="genero.name" @click="$store.commit('movie/actualizarFiltro', {idGenero:genero.id})"/>
+											<!--  :color="$store.state.movie.filtro.idGenero==genero.id?'primary':'white'" size="sm" :text-color="$store.state.movie.filtro.idGenero==genero.id?'white':'black'" -->
+											<q-btn size="sm" :class="$store.state.movie.filtro.idGenero==genero.id?'bg-primary text-white':'bg-white text-black'" :label="genero.name" @click="$store.commit('movie/actualizarFiltro', {idGenero:genero.id})"/>
 										</div>
 									</div>
 								</q-card-section>
@@ -111,7 +115,9 @@
 								<q-card-section>
 									<div class="col full-height row items-center">
 										<div class="q-date__years-item flex flex-center q-mt-xs" v-for="index in 20" :key="index">
-											<q-btn :color="$store.state.movie.filtro.year==1999+index?'primary':'white'" size="sm" :text-color="$store.state.movie.filtro.year==1999+index?'white':'black'" :label="1999+index" @click="$store.commit('movie/actualizarFiltro', {year:1999+index})"/>
+											<!-- :color="$store.state.movie.filtro.year==1999+index?'primary':'white'" size="sm" :text-color="$store.state.movie.filtro.year==1999+index?'white':'black'" -->
+											<q-btn :class="$store.state.movie.filtro.year==1999+index?'bg-primary text-white':'bg-white text-black'" 
+											:label="1999+index" @click="$store.commit('movie/actualizarFiltro', {year:1999+index})"/>
 										</div>
 									</div>
 								</q-card-section>
@@ -125,7 +131,8 @@
 								<q-card-section>
 									<div class="col full-height row items-center">
 										<div class="q-date__years-item flex flex-center q-mt-xs" v-for="index in 26" :key="index">
-											<q-btn :color="$store.state.movie.filtro.letra==String.fromCharCode(64+index)?'primary':'white'" size="sm" :text-color="$store.state.movie.filtro.letra==String.fromCharCode(64+index)?'white':'black'" :label="String.fromCharCode(64+index)" @click="$store.commit('movie/actualizarFiltro', {letra:String.fromCharCode(64+index)})"/>
+											<!-- :color="$store.state.movie.filtro.letra==String.fromCharCode(64+index)?'primary':'white'" size="sm" :text-color="$store.state.movie.filtro.letra==String.fromCharCode(64+index)?'white':'black'"  -->
+											<q-btn :class="$store.state.movie.filtro.letra==String.fromCharCode(64+index)?'bg-primary text-white':'bg-white text-black'" :label="String.fromCharCode(64+index)" @click="$store.commit('movie/actualizarFiltro', {letra:String.fromCharCode(64+index)})"/>
 										</div>
 									</div>
 								</q-card-section>
@@ -228,6 +235,25 @@ export default {
 		},
 	
 	methods: {
+		changeCategoria(categoria){
+
+			if(categoria.label === 'Series'){
+				this.$store.commit('movie/SET_THEME', {
+					primary: "#027BE3",
+					secondary: "#263238",
+					accent: "#333333"
+				})
+			}else{
+				this.$store.commit('movie/SET_THEME', {
+					primary: "#ef6c00",
+					secondary: "#111111",
+					accent: "#333333"
+				})
+			}
+
+			this.$store.commit('movie/actualizarCategoria',categoria)
+
+		},
 		openURL,
 		// resetFilter(){
 		// 	this.$store.commit('movie/actualizarFiltro', {})
@@ -275,11 +301,12 @@ export default {
 .MyLayout
 	// .mydrawer
 	// 	overflow hidden!important
-		
+	
+
 	.q-field__control
 		height 50px!important
-
 	
+
 </style>
 
 
