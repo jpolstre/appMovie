@@ -30,7 +30,7 @@
 		>
 		<!-- <q-scroll-area  style="height:calc(100% - 110px);margin-top:110px;"> -->
 
-		<q-scroll-area  style="height:calc(100% - 50px);margin-top:50px;">
+		<q-scroll-area  style="height:calc(100vh - 50px);margin-top:50px;">
 			<q-separator/>
 			<q-list dense>
 

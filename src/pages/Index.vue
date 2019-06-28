@@ -1,7 +1,10 @@
 <template>
 	
-	<q-page padding class="bg-secondary text-white">
+	<q-page padding class="q-pr-none bg-secondary text-white">
+		
+		<q-scroll-area  ref="scrollArea" style="height: calc(100vh - 50px);width: 100%;">
 		<h6 class="q-ma-none q-pa-none">	{{$store.state.movie.categoria.label}}</h6 class="q-my-none q-py-none">
+
 		<q-card flat bordered class="q-ma-none q-pa-none bg-secondary text-white" v-if="filtro.length">
 			<q-card-section class="q-mb-none q-pb-none">
 				<div class="row items-center no-wrap">
@@ -20,8 +23,11 @@
 				</q-chip>
 			</q-card-section>
 		</q-card>
+		<q-separator color="primary"/>
+
 		<!-- <img alt="Quasar logo" src="~assets/quasar-logo-full.svg"> -->
 		<!-- {{$store.state.movie.filtro}} -->
+		{{data}}
 		<div class="q-pa-lg flex flex-center">
 			<q-pagination
 				v-model="pagination.page"
@@ -33,7 +39,15 @@
 			>
 			</q-pagination>
 		</div>
+
+		</q-scroll-area>
+
+		<q-page-sticky v-show="showFabUp()" position="bottom-right" :offset="[18, 18]">
+			<q-btn fab icon="add" color="accent" />
+		</q-page-sticky>
+
 	</q-page>
+ 
 </template>
 <script>
 export default {
@@ -64,6 +78,7 @@ export default {
 	},
 
 	computed:{
+
 		filtro(){
 			let valReturn, arrReturn = []
 			let keys = Object.keys(this.$store.state.movie.filtro)
@@ -97,11 +112,22 @@ export default {
 	},
 
 	methods:{
-		onPaginate(value){
-			if(this.pagination.page == value){
-				console.log(value)
-
+		showFabUp(){
+			if(!this.$refs.scrollArea){
+				return false
+			}else{
+				if(this.$refs.scrollArea.getScrollPosition()>100){
+					return true
+				}
+				return false
 			}
+			
+		},
+		onPaginate(value){
+			// if(this.pagination.page !== value){
+			// 	console.log(value)
+
+			// }
 
 			this.onRequest({
 				pagination: this.pagination,
@@ -153,6 +179,7 @@ export default {
 
 						// ...and turn of loading indicator
 						self.$q.loading.hide()
+						self.$refs.scrollArea.setScrollPosition(0, 200)
 		
 					})
 					.catch(r => {
